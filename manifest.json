@@ -11,7 +11,7 @@
   },
 
   "content_scripts": [ {
-    "js":      [ "script.js" ],
+    "js":      [ "status.js" ],
     "matches": [ "https://github.com/*" ],
     "run_at":  "document_idle"
   } ]
