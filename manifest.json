@@ -11,7 +11,7 @@
   },
 
   "content_scripts": [ {
-    "js":      [ "status.js" ],
+    "js":      [ "canvasjs.min.js", "status.js", "chart.js"],
     "matches": [ "https://github.com/*" ],
     "run_at":  "document_idle"
   } ]

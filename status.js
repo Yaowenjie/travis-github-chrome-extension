@@ -31,8 +31,6 @@ function insertStatusIcon(el) {
         project = el.parentElement.parentElement.parentElement.pathname;
       }
     }
-    console.log(el.title);
-    console.log("project:" + project);
 
     var img = window.document.createElement('img');
     img.src = 'https://api.travis-ci.org' + project + '.svg';
