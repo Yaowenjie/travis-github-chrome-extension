@@ -3,12 +3,11 @@
 document.styleSheets[0].insertRule('.travis-ci{display:inline-block;margin-left:8px;line-height:1em;position:relative;top:3px;opacity:.85;}', 1);
 document.styleSheets[0].insertRule('.travis-ci:hover{opacity:1}', 1);
 document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
-document.styleSheets[0].insertRule('.mini-repo-list-item span.repo-and-owner{max-width:600px;}', 1);
 
 var selectors =
     [ 'h1.public > strong > a'
     , '.js-repo-list h3.repo-list-name a:first-child'
-    , 'span.repo'
+    , '.columns.popular-repos span.repo'
     ];
 
 selectors.forEach(function(sel) {
@@ -29,6 +28,8 @@ function insertStatusIcon(el) {
       /* This is for pinned repo list */
       if (typeof project === 'undefined') {
         project = el.parentElement.parentElement.parentElement.pathname;
+      } else {
+        document.styleSheets[0].insertRule('.mini-repo-list-item span.repo-and-owner{max-width:600px;}', 1);
       }
     }
 
