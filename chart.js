@@ -1,4 +1,4 @@
-var overallDiv = window.document.querySelectorAll(".repository-lang-stats-graph.js-toggle-lang-stats");
+var overallDiv = window.document.querySelectorAll("div.file-navigation.in-mid-page");
 
 function getJSONP(url, success) {
     var ud = '_' + +new Date,
@@ -23,16 +23,19 @@ if (overallDiv.length !== 0) {
   /* Getting Data from github page and travis-ci api */
   var ownerAndProject = window.document.querySelectorAll("h1.public > strong > a")[0].pathname;
   var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
-  console.log("------(7)" + jsonPath);
   var buildNum = [];
   var buildTime = [];
   var buildColor = [];
   var allColor = ['#39aa56', '#db4545', '#f1e05a'];
   var buildInfo = [];
   $.getJSON(jsonPath, function(data) {
-    if (data.length > 1) {
+    if (data.length >= 1) {
+      var scope = 10;
+      if (data.length < 10) {
+        scope = data.length;
+      }
       overallDiv[0].parentNode.insertBefore(chartDiv, overallDiv[0].nextSibling);
-      for (var i = 0; i < 10; i++) {
+      for (var i = 0; i < data.length; i++) {
         buildNum.push("#" + data[i]["number"]);
         buildTime.push(Math.round(data[i]["duration"]/60*100)/100);
         if (data[i]["state"] !== "finished") {
