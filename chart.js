@@ -34,7 +34,7 @@ if (overallDiv.length !== 0) {
         }
         var buildId = data[i]["id"];
         var buildTimeStr = Math.floor(data[i]["duration"]/60) + "min" + data[i]["duration"]%60 + "s";
-        buildInfo.push("<a href='https://travis-ci.org/Yaowenjie/yaowenjie.github.io/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
+        buildInfo.push("<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
       }
 
       var chart = new CanvasJS.Chart("chartContainer",
