@@ -1,20 +1,5 @@
 var overallDiv = window.document.querySelectorAll("div.file-navigation.in-mid-page");
 
-function getJSONP(url, success) {
-    var ud = '_' + +new Date,
-        script = document.createElement('script'),
-        head = document.getElementsByTagName('head')[0]
-               || document.documentElement;
-
-    window[ud] = function(data) {
-        head.removeChild(script);
-        success && success(data);
-    };
-
-    script.src = url.replace('callback=?', 'callback=' + ud);
-    head.appendChild(script);
-}
-
 if (overallDiv.length !== 0) {
   var chartDiv = window.document.createElement('div');
   chartDiv.setAttribute("id", "chartContainer");
