@@ -20,29 +20,47 @@ if (overallDiv.length !== 0) {
         scope = data.length;
       }
       overallDiv[0].parentNode.insertBefore(chartDiv, overallDiv[0].nextSibling);
-      for (var i = 0; i < data.length; i++) {
+      for (var i = 0; i < scope; i++) {
+
         buildNum.push("#" + data[i]["number"]);
+
+        var buildId = data[i]["id"];
+        var buildTimeStr = Math.floor(data[i]["duration"]/60) + "min" + data[i]["duration"]%60 + "s";
+        buildInfo.push("<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
+
         buildTime.push(Math.round(data[i]["duration"]/60*100)/100);
+
         if (data[i]["state"] !== "finished") {
-            buildColor.push(allColor[2]);
+          buildColor.push(allColor[2]);
         } else {
           var colorOrder = data[i]["result"];
           if (colorOrder === null) {
             colorOrder = 1;
           }
-            buildColor.push(allColor[colorOrder]);
+          buildColor.push(allColor[colorOrder]);
         }
-        var buildId = data[i]["id"];
-        var buildTimeStr = Math.floor(data[i]["duration"]/60) + "min" + data[i]["duration"]%60 + "s";
-        buildInfo.push("<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
       }
+      /* the current building is running*/
+      if (buildTime[0] === 0) {
+        if (buildTime.length === 1) {
+          buildTime[0] = 1;
+        } else {
+          buildTime[0] = buildTime[1];
+        }
+        buildInfo[0] = "<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + data[0]["id"] + "'>Go to this build <br/> It's Running!</a>";
+      }
+
+      console.log(buildTime);
+      console.log(buildColor);
+      console.log(buildInfo);
 
       var chart = new CanvasJS.Chart("chartContainer",
       {
         animationEnabled: true,
         title:{
           fontFamily: "Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif",
-          text: "Travis-CI build Status (Recent 10 times)"
+          text: "Travis-CI build Status (Recent 10 times)",
+          fontSize: 20
         },
         axisY: {
           title: "Build Time(Minutes)"
