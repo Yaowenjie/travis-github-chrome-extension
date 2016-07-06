@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "version": "2.0.1",
+  "version": "2.0.2",
   "name": "github+travis v2",
   "description": "Display build status chart and status block next to the project name on github.",
 
