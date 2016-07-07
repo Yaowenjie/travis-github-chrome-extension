@@ -1,14 +1,16 @@
 {
   "manifest_version": 2,
 
-  "version": "2.0.4",
+  "version": "2.0.5",
   "name": "github+travis v2",
   "description": "Display build status chart and status block next to the project name on github.",
 
+  "homepage_url": "https://github.com/Yaowenjie/travis-github-chrome-extension",
   "icons": {
     "48":  "icon-48.png",
     "128": "icon-128.png"
   },
+
 
   "content_scripts": [ {
     "js":      [ "jquery-1.8.3.min.js", "canvasjs.min.js", "status.js", "chart.js"],
