@@ -81,6 +81,8 @@ if (overallDiv.length !== 0) {
       var buildFinished = data[i]["finished_at"];
       var buildTimeStr = Math.floor(buildDuration/60) + "min" + Math.floor(buildDuration%60) + "s";
 
+      buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + "...") : buildMessage;
+
       buildNum.push("#" + data[i]["number"]);
       buildInfo.push("<b>Build Time</b>: " + buildTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>");
       buildTime.push(Math.round(buildDuration/60*100)/100);
