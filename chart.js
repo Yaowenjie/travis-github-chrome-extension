@@ -4,55 +4,22 @@ if (overallDiv.length !== 0) {
   var chartDiv = $("<div id='chartContainer' style='height: 300px; width: 100%; border: 1px solid #ddd;border-radius: 0 3px 3px 0;'></div>");
 
   /* Getting Data from github page and travis-ci api */
-  var allColor = ['#39aa56', '#db4545', '#f1e05a'];
+  var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
   var ownerAndProject = $("h1.public > strong > a")[0].pathname;
   var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
 
-  var buildNum = [];
-  var buildTime = [];
-  var buildColor = [];
-  var buildInfo = [];
-
   $.getJSON(jsonPath, function(data) {
     if (data.length >= 1) {
-      var scope = 10;
-      if (data.length < 10) {
-        scope = data.length;
-      }
+      var range = (data.length < 10) ? data.length : 10;
       chartDiv.insertAfter(overallDiv[0]);
-      for (var i = 0; i < scope; i++) {
 
-        buildNum.push("#" + data[i]["number"]);
+      var info = getInfoFromJson(data, range);
 
-        var buildId = data[i]["id"];
-        var buildTimeStr = Math.floor(data[i]["duration"]/60) + "min" + data[i]["duration"]%60 + "s";
-        buildInfo.push("<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
-
-        buildTime.push(Math.round(data[i]["duration"]/60*100)/100);
-
-        if (data[i]["state"] !== "finished") {
-          buildColor.push(allColor[2]);
-        } else {
-          var colorOrder = data[i]["result"];
-          if (colorOrder === null) {
-            colorOrder = 1;
-          }
-          buildColor.push(allColor[colorOrder]);
+      for (var i=range; i<10; i++) {
+        if(typeof info.buildNum[i] === "undefined") {
+          info.buildNum[i] = "#";
         }
       }
-      /* the current building is running*/
-      if (buildTime[0] === 0) {
-        if (buildTime.length === 1) {
-          buildTime[0] = 1;
-        } else {
-          buildTime[0] = buildTime[1];
-        }
-        buildInfo[0] = "<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + data[0]["id"] + "'>Go to this build <br/> It's Running!</a>";
-      }
-
-      console.log(buildTime);
-      console.log(buildColor);
-      console.log(buildInfo);
 
       var chart = new CanvasJS.Chart("chartContainer",
       {
@@ -62,27 +29,28 @@ if (overallDiv.length !== 0) {
           text: "Travis-CI build Status (Recent 10 times)",
           fontSize: 20
         },
-        axisY: {
-          title: "Build Time(Minutes)"
-        },
         axisX: {
           title: "Build Number",
           labelFontWeight: "bold"
+        },
+    		axisY: {
+          title: "Build Time(Minutes)",
+    			interlacedColor: "#f5f5f5"
         },
         data: [
           {
             type: "column", //change type to bar, line, area, pie, etc
             dataPoints: [
-              { label: buildNum[9], y: buildTime[9], color: buildColor[9], toolTipContent: buildInfo[9] },
-              { label: buildNum[8], y: buildTime[8], color: buildColor[8], toolTipContent: buildInfo[8] },
-              { label: buildNum[7], y: buildTime[7], color: buildColor[7], toolTipContent: buildInfo[7] },
-              { label: buildNum[6], y: buildTime[6], color: buildColor[6], toolTipContent: buildInfo[6] },
-              { label: buildNum[5], y: buildTime[5], color: buildColor[5], toolTipContent: buildInfo[5] },
-              { label: buildNum[4], y: buildTime[4], color: buildColor[4], toolTipContent: buildInfo[4] },
-              { label: buildNum[3], y: buildTime[3], color: buildColor[3], toolTipContent: buildInfo[3] },
-              { label: buildNum[2], y: buildTime[2], color: buildColor[2], toolTipContent: buildInfo[2] },
-              { label: buildNum[1], y: buildTime[1], color: buildColor[1], toolTipContent: buildInfo[1] },
-              { label: "Current:" + buildNum[0],  y: buildTime[0], color: buildColor[0], toolTipContent: buildInfo[0] }
+              { label: info.buildNum[9], y: info.buildTime[9], color: info.buildColor[9], toolTipContent: info.buildInfo[9] },
+              { label: info.buildNum[8], y: info.buildTime[8], color: info.buildColor[8], toolTipContent: info.buildInfo[8] },
+              { label: info.buildNum[7], y: info.buildTime[7], color: info.buildColor[7], toolTipContent: info.buildInfo[7] },
+              { label: info.buildNum[6], y: info.buildTime[6], color: info.buildColor[6], toolTipContent: info.buildInfo[6] },
+              { label: info.buildNum[5], y: info.buildTime[5], color: info.buildColor[5], toolTipContent: info.buildInfo[5] },
+              { label: info.buildNum[4], y: info.buildTime[4], color: info.buildColor[4], toolTipContent: info.buildInfo[4] },
+              { label: info.buildNum[3], y: info.buildTime[3], color: info.buildColor[3], toolTipContent: info.buildInfo[3] },
+              { label: info.buildNum[2], y: info.buildTime[2], color: info.buildColor[2], toolTipContent: info.buildInfo[2] },
+              { label: info.buildNum[1], y: info.buildTime[1], color: info.buildColor[1], toolTipContent: info.buildInfo[1] },
+              { label: "Current:" + info.buildNum[0],  y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0] }
             ]
           }
         ]
@@ -90,6 +58,44 @@ if (overallDiv.length !== 0) {
       chart.render();
     }
   });
+
+  function getInfoFromJson(data, range) {
+    var buildNum = [];
+    var buildTime = [];
+    var buildColor = [];
+    var buildInfo = [];
+
+    for (var i = 0; i < range; i++) {
+      var buildId = data[i]["id"];
+      var buildDuration = data[i]["duration"];
+      var buildState = data[i]["state"];
+      var buildResult = data[i]["result"];
+      var buildTimeStr = Math.floor(buildDuration/60) + "min" + buildDuration%60 + "s";
+
+      buildNum.push("#" + data[i]["number"]);
+      buildInfo.push("<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + buildId + "'>Go to this build</> <Br/> Build Time: " + buildTimeStr);
+      buildTime.push(Math.round(buildDuration/60*100)/100);
+
+      if (buildState !== "finished") {
+        buildColor.push(allColor[2]);
+      } else {
+        buildResult = (buildResult === null) ? 1 : buildResult;
+        buildColor.push(allColor[buildResult]);
+      }
+    }
+    /* the current building is running*/
+    if (buildTime[0] === 0) {
+      buildTime[0] = (buildTime.length === 1) ? 1 : buildTime[1];
+      buildInfo[0] = "<a href='https://travis-ci.org" + ownerAndProject + "/builds/" + data[0]["id"] + "'>Go to this build <br/> It's Running!</a>";
+    }
+
+    var info = {};
+    info.buildNum = buildNum;
+    info.buildTime = buildTime;
+    info.buildColor = buildColor;
+    info.buildInfo = buildInfo;
+    return info;
+  }
 
 
 }
