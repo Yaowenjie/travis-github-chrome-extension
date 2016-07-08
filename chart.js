@@ -77,23 +77,28 @@ if (overallDiv.length !== 0) {
       var buildState = data[i]["state"];
       var buildResult = data[i]["result"];
       var buildMessage = data[i]["message"];
-      var buildTimeStr = Math.floor(buildDuration/60) + "min" + buildDuration%60 + "s";
+      var buildStarted = data[i]["started_at"];
+      var buildFinished = data[i]["finished_at"];
+      var buildTimeStr = Math.floor(buildDuration/60) + "min" + Math.floor(buildDuration%60) + "s";
 
       buildNum.push("#" + data[i]["number"]);
-      buildInfo.push("Build Time: " + buildTimeStr + "<br/><span>" + buildMessage + "</span>");
+      buildInfo.push("<b>Build Time</b>: " + buildTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>");
       buildTime.push(Math.round(buildDuration/60*100)/100);
 
-      if (buildState !== "finished") {
+      if (buildState === "started") {
         buildColor.push(allColor[2]);
+        if (buildStarted && buildFinished === null) {
+            var skipTime = (new Date() - new Date(buildStarted))/1000;
+            var skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
+            buildTime[i] = Math.round(skipTime/60*100)/100;
+            buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        } else {
+            buildInfo[i] = "Oops, the build may be cancelled it.<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        }
       } else {
         buildResult = (buildResult === null) ? 1 : buildResult;
         buildColor.push(allColor[buildResult]);
       }
-    }
-    /* the current building is running*/
-    if (buildTime[0] === 0) {
-      buildTime[0] = (buildTime.length === 1) ? 1 : buildTime[1];
-      buildInfo[0] = "It's Running!" + buildTimeStr + "<br/><span>" + buildMessage + "</span>";
     }
 
     info.buildNum = buildNum;
