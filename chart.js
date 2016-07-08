@@ -1,25 +1,25 @@
-var overallDiv = window.document.querySelectorAll("div.file-navigation.in-mid-page");
+var overallDiv = $("div.file-navigation.in-mid-page");
 
 if (overallDiv.length !== 0) {
-  var chartDiv = window.document.createElement('div');
-  chartDiv.setAttribute("id", "chartContainer");
-  chartDiv.style.cssText = 'height: 300px; width: 100%; border: 1px solid #ddd;border-radius: 0 3px 3px 0;';
+  var chartDiv = $("<div id='chartContainer' style='height: 300px; width: 100%; border: 1px solid #ddd;border-radius: 0 3px 3px 0;'></div>");
 
   /* Getting Data from github page and travis-ci api */
-  var ownerAndProject = window.document.querySelectorAll("h1.public > strong > a")[0].pathname;
+  var allColor = ['#39aa56', '#db4545', '#f1e05a'];
+  var ownerAndProject = $("h1.public > strong > a")[0].pathname;
   var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
+
   var buildNum = [];
   var buildTime = [];
   var buildColor = [];
-  var allColor = ['#39aa56', '#db4545', '#f1e05a'];
   var buildInfo = [];
+
   $.getJSON(jsonPath, function(data) {
     if (data.length >= 1) {
       var scope = 10;
       if (data.length < 10) {
         scope = data.length;
       }
-      overallDiv[0].parentNode.insertBefore(chartDiv, overallDiv[0].nextSibling);
+      chartDiv.insertAfter(overallDiv[0]);
       for (var i = 0; i < scope; i++) {
 
         buildNum.push("#" + data[i]["number"]);
