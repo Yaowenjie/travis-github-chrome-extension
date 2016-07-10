@@ -95,7 +95,7 @@ if (overallDiv.length !== 0) {
             buildTime[i] = Math.round(skipTime/60*100)/100;
             buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
         } else {
-            buildInfo[i] = "Oops, the build may be cancelled it.<br/><span><b>Message:</b>" + buildMessage + "</span>";
+            buildInfo[i] = "Oops, the build may be cancelled.<br/><span><b>Message:</b>" + buildMessage + "</span>";
         }
       } else {
         buildResult = (buildResult === null) ? 1 : buildResult;
