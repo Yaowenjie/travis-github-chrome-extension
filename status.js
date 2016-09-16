@@ -6,7 +6,7 @@ document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 var selectors =
     [ 'h1.public > strong > a'
     , '.js-repo-list h3.f4 a:first-child'
-    , '.columns.popular-repos span.repo'
+    , '.js-pinned-repos-reorder-container a.mb-2'
     ];
 
 selectors.forEach(function(sel) {
@@ -29,15 +29,5 @@ function insertStatusIcon(el) {
 
 function getProject(el) {
   var project = el.pathname;
-  if (typeof project === 'undefined') {
-    project = el.parentElement.parentElement.pathname;
-    /* This is for pinned repo list */
-    if (typeof project === 'undefined') {
-      project = el.parentElement.parentElement.parentElement.pathname;
-    } else {
-      /* lengthen the span to avoid hiding our icon*/
-      document.styleSheets[0].insertRule('.mini-repo-list-item span.repo-and-owner{max-width:600px;}', 1);
-    }
-  }
   return project;
 }
