@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
 
-  "version": "2.0.8",
+  "version": "2.0.9",
   "name": "Github Travis Stat",
   "short_name": "build-stat",
   "description": "Display travis-ci build status and time chart, with status icon next to the project name on github.",
