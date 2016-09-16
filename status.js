@@ -5,7 +5,7 @@ document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 
 var selectors =
     [ 'h1.public > strong > a'
-    , '.js-repo-list h3.repo-list-name a:first-child'
+    , '.js-repo-list h3.f4 a:first-child'
     , '.columns.popular-repos span.repo'
     ];
 
