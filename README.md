@@ -10,7 +10,7 @@ This repo's reference is originally from [WereHamster's github repo](https://git
 
 Also, you can see the build time and message detail when you hover on the column you're care about. Click the column, and you will go to the specific build in travis-ci.
 Below is what the repositories list looks like, you can find which repos has been launched in travis-ci only if the repo is public:
-![Repo list](imgs/2.png)
+![Repo list](imgs/2-new.png)
 
 On all pages, once you click the build icon, you will go to travis-ci page.
 
