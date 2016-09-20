@@ -8,7 +8,7 @@ You can click [this extension link](https://chrome.google.com/webstore/detail/gi
 This repo's reference is originally from [WereHamster's github repo](https://github.com/wereHamster/github-travis-chrome-extension), which is no longer working since github's layout changed. So I changed the code to fit the new layout of github and did some refactor. Additionally, I added a __visual chart__ to show the last 10 times __build time__ and __build status__ of travis-ci. There is travis-ci pipeline status icon beside your github repos title and an awesome travis build chart in your repo page. As follows:
 ![Travis Status](imgs/4.png)
 
-Also, you can see the build time and message detail when you hover on the column you're care about. Click the column, and you will go to the specific build in travis-ci.
+Also, you can see the build time and commit message detail when you hover on the column you're care about. Click the column, and you will go to the specific build in travis-ci.
 Below is what the repositories list looks like, you can find which repos has been launched in travis-ci only if the repo is public:
 ![Repo list](imgs/2-new.png)
 
