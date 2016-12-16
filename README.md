@@ -1,5 +1,6 @@
 ## Brief
 This extension is to display __travis-ci__ status for repos in __github__. There is a visual chart which shows build status and  duration changes for recent 10 times.
+![GIF](imgs/animation.gif)
 
 ## How to install it
 You can click [this extension link](https://chrome.google.com/webstore/detail/github%2Btravis-v2/ekkfhiophiaakmeppcnkblpbbjlnlnmh) directly, or search "__github travis stat__" on __Chrome web store__. Then add it to your chrome.
