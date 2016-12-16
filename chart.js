@@ -3,9 +3,9 @@
 if (overallDiv.length !== 0) {
 	// Get URL for the travis-ci icon.
 	var travisIcon = chrome.extension.getURL("/travis-icon.png");
-	
+
 	// Generate the Chart elements.
-	var chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" + 
+	var chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
 						"<h5><img src='" + travisIcon + "' height='20' style='vertical-align: middle;'>" +
 						" Travis-CI Build Chart</h5>" +
 					 "</div>" +
@@ -15,7 +15,7 @@ if (overallDiv.length !== 0) {
 	var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
 	var ownerAndProject = $("h1.public > strong > a")[0].pathname;
 	var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
-	
+
 	var bIsChartRendered = false;
 
 	$.getJSON(jsonPath, function(data) {
@@ -36,7 +36,7 @@ if (overallDiv.length !== 0) {
 				animationEnabled: true,
 				title:{
 					fontFamily: "Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif",
-					text: "Travis-CI build Status (Recent 10 builds)",
+					text: "Build Status (Recent 10 builds)",
 					fontSize: 20
 				},
 				axisX: {
@@ -79,16 +79,16 @@ if (overallDiv.length !== 0) {
 				bIsChartRendered = true;
 				chart.render();
 			}
-			
+
 			// Attach the chart header click event
 			$("#chartHeader").click(function() {
 				var chartDiv = $(this).next("#chartContainer");
 				// Toggle the chartContainer visibility
-				chartDiv.slideToggle(150, 
+				chartDiv.slideToggle(150,
 					function() {
 						// Record the current visibility state
 						localStorage["chartHeaderHidden"] = $(chartDiv).is(":hidden");
-						
+
 						// Render the chart if we haven't done so already and record that it has been rendered
 						if (!bIsChartRendered) {
 							bIsChartRendered = true;
