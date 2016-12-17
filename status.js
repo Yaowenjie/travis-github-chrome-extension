@@ -5,9 +5,11 @@ document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 
 var selectors =
     [ 'h1.public > strong > a'
-    , '.js-repo-list h3.f4 a:first-child'
+    , '.js-repo-list h3 a:first-child'
     ];
 var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
+
+//*[@id="user-repositories-list"]/div[1]/li[1]/div[1]/h3/a
 
 selectors.forEach(function(sel) {
     $(sel).each(function() {

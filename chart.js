@@ -119,7 +119,7 @@ if (overallDiv.length !== 0) {
 			buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + "...") : buildMessage;
 
 			buildNum.push("#" + data[i]["number"]);
-			buildInfo.push("<b>Build Time</b>: " + buildTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>");
+			buildInfo.push("<b>Build Time</b>: " + buildTimeStr + "<br/><span><b>Message: </b>" + buildMessage + "</span>");
 			buildTime.push(Math.round(buildDuration/60*100)/100);
 
 			if (buildState === "started") {
