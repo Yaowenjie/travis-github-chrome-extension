@@ -3,13 +3,11 @@ document.styleSheets[0].insertRule('.travis-ci{display:inline-block;margin-left:
 document.styleSheets[0].insertRule('.travis-ci:hover{opacity:1}', 1);
 document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 
-var selectors =
-    [ 'h1.public > strong > a'
-    , '.js-repo-list h3 a:first-child'
-    ];
+var selectors =[
+  'h1.public > strong > a',
+  '.js-repo-filter h3 a:first-child'
+];
 var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
-
-//*[@id="user-repositories-list"]/div[1]/li[1]/div[1]/h3/a
 
 selectors.forEach(function(sel) {
     $(sel).each(function() {
@@ -23,11 +21,11 @@ $(repoListSelectors).each(function() {
 });
 
 function insertStatusIcon(el, project) {
-    var img = $("<img src='https://api.travis-ci.org" + project + ".svg' alt='build status'></img>");
+  var img = $("<img src='https://api.travis-ci.org" + project + ".svg' alt='build status'></img>");
 
-    img.load(function() {
-        var link = $("<a class='travis-ci' href='https://travis-ci.org" + project + "'></a>");
-        link.append(img);
-        link.appendTo($(el));
-    });
+  img.load(function() {
+      var link = $("<a class='travis-ci' href='https://travis-ci.org" + project + "'></a>");
+      link.append(img);
+      link.appendTo($(el));
+  });
 }
