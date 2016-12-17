@@ -3,7 +3,7 @@ This extension is to display __travis-ci__ status for repos in __github__. There
 ![GIF](imgs/animation.gif)
 
 ## How to install it
-You can click [this extension link](https://chrome.google.com/webstore/detail/github%2Btravis-v2/ekkfhiophiaakmeppcnkblpbbjlnlnmh) directly, or search "__github travis stat__" on __Chrome web store__. Then add it to your chrome.
+You can click [this extension link](https://chrome.google.com/webstore/detail/github-travis-stat/ekkfhiophiaakmeppcnkblpbbjlnlnmh) directly, or search "__github travis stat__" on __Chrome web store__. Then add it to your chrome.
 
 ## Introduction
 This repo's reference is originally from [WereHamster's github repo](https://github.com/wereHamster/github-travis-chrome-extension), which is no longer working since github's layout changed. So I changed the code to fit the new layout of github and did some refactor. Additionally, I added a __visual chart__ to show the last 10 times __build time__ and __build status__ of travis-ci. There is travis-ci pipeline status icon beside your github repos title and an awesome travis build chart in your repo page. As follows:
@@ -26,7 +26,7 @@ Besides, sending your pull request on this repo would be better to improve it.
 --------
 
 ## 安装
-安装该插件，你可以直接点击[该链接](https://chrome.google.com/webstore/detail/github%2Btravis-v2/ekkfhiophiaakmeppcnkblpbbjlnlnmh)，或者访问Chrome web store 并搜索“__github travis v2__”关键字，然后添加你的chrome浏览器即可。
+安装该插件，你可以直接点击[该链接](https://chrome.google.com/webstore/detail/github-travis-stat/ekkfhiophiaakmeppcnkblpbbjlnlnmh)，或者访问Chrome web store 并搜索“__github travis v2__”关键字，然后添加你的chrome浏览器即可。
 如果你无法访问chrome web store，请下载[本repo最新的release版本](https://github.com/Yaowenjie/travis-github-chrome-extension/releases)，解压，然后在Chrome浏览器开发者模式下手动添加该插件（见上文"How to install it in Developer mode"）。
 
 ## 简介
