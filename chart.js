@@ -14,6 +14,8 @@ if (overallDiv.length !== 0) {
 
 	/* Getting Data from github page and travis-ci api */
 	var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
+  var githubGrey = "#68777d";
+  var globalFontFamily = "arial, sans-serif";
 	var ownerAndProject = $("h1.public > strong > a")[0].pathname;
 	var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
 
@@ -36,18 +38,28 @@ if (overallDiv.length !== 0) {
 			{
         backgroundColor: bodyBgColor,
 				animationEnabled: true,
-				title:{
-					fontFamily: "Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif",
+				title: {
 					text: "Build Status (Recent 10 builds)",
+          fontFamily: globalFontFamily,
+          fontWeight: "normal",
+          fontColor: githubGrey,
 					fontSize: 20
 				},
 				axisX: {
 					title: "Build Number",
-					labelFontWeight: "bold"
+          titleFontFamily: globalFontFamily,
+					titleFontWeight: "normal",
+          titleFontSize: 12
 				},
 				axisY: {
-					title: "Build Time (Minutes)"
+					title: "Build Time (Minutes)",
+          titleFontFamily: globalFontFamily,
+					titleFontWeight: "normal",
+          titleFontSize: 12
 				},
+        toolTip:{
+          fontFamily: globalFontFamily
+        },
 				data: [
 					{
 						type: "column", //change type to bar, line, area, pie, etc
