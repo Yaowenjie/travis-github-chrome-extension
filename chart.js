@@ -1,4 +1,5 @@
  var overallDiv = $("div.file-navigation.in-mid-page");
+ var bodyBgColor = $("body").css("background-color");
 
 if (overallDiv.length !== 0) {
 	// Get URL for the travis-ci icon.
@@ -33,6 +34,7 @@ if (overallDiv.length !== 0) {
 
 			var chart = new CanvasJS.Chart("chartContainer",
 			{
+        backgroundColor: bodyBgColor,
 				animationEnabled: true,
 				title:{
 					fontFamily: "Helvetica, arial, nimbussansl, liberationsans, freesans, clean, sans-serif",
@@ -44,8 +46,7 @@ if (overallDiv.length !== 0) {
 					labelFontWeight: "bold"
 				},
 				axisY: {
-					title: "Build Time (Minutes)",
-					interlacedColor: "#f5f5f5"
+					title: "Build Time (Minutes)"
 				},
 				data: [
 					{
