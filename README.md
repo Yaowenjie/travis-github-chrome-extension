@@ -40,7 +40,7 @@ Besides, sending your pull request on this repo would be better to improve it.
 # Update History
 
 - **2.0.12** - Support [Stylish](https://chrome.google.com/webstore/detail/stylish-custom-themes-for/fjnbnpbmkenffdnngjfgmeleoegfcffe?hl=en) github theme (for **Github Dark** mainly), and trim title font.
-![Github Drak](imgs/dark.png)
+![Github Drak](imgs/dark.jpg)
 - **2.0.11** - Fix the build status badge on **Repositories** tab, and add it into **Stars** tab.
 - **2.0.10** - Add feature of **collapsing** chart by clicking chart header.
 - **2.0.9** - Apply new layout of github.
