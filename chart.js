@@ -60,8 +60,7 @@ if (overallDiv.length !== 0) {
         toolTip:{
           fontFamily: globalFontFamily
         },
-				data: [
-					{
+				data: [{
 						type: "column", //change type to bar, line, area, pie, etc
 						dataPoints: [
 							{ label: info.buildNum[9], y: info.buildTime[9], color: info.buildColor[9], toolTipContent: info.buildInfo[9], click: onClick, cursor: "pointer" },
@@ -75,8 +74,7 @@ if (overallDiv.length !== 0) {
 							{ label: info.buildNum[1], y: info.buildTime[1], color: info.buildColor[1], toolTipContent: info.buildInfo[1], click: onClick, cursor: "pointer" },
 							{ label: "Current:" + info.buildNum[0],	y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0], click: onClick, cursor: "pointer" }
 						]
-					}
-				]
+			  }]
 			});
 
 			function onClick(e) {

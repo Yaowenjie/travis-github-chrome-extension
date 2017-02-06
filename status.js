@@ -9,16 +9,17 @@ var selectors =[
 ];
 var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
 
-selectors.forEach(function(sel) {
-    $(sel).each(function() {
-        insertStatusIcon(this, this.pathname);
-    });
-});
-
-$(repoListSelectors).each(function() {
-  var project = $(this).siblings('span').children('a').attr('href');
-  insertStatusIcon(this, project);
-});
+function showBadge() {
+  selectors.forEach(function(sel) {
+      $(sel).each(function() {
+          insertStatusIcon(this, this.pathname);
+      });
+  });
+  $(repoListSelectors).each(function() {
+    var project = $(this).siblings('span').children('a').attr('href');
+    insertStatusIcon(this, project);
+  });
+}
 
 function insertStatusIcon(el, project) {
   var img = $("<img src='https://api.travis-ci.org" + project + ".svg' alt='build status'></img>");
@@ -29,3 +30,20 @@ function insertStatusIcon(el, project) {
       link.appendTo($(el));
   });
 }
+
+function isBadgeNonexisted() {
+  return $(".travis-ci").length === 0;
+}
+
+showBadge();
+
+$(document).ready(function() {
+  // When user clicks anywhere, show the Travis Badge!
+  $('body').mouseup(function() {
+   setTimeout(function() {
+     if (isBadgeNonexisted()) {
+       showBadge();
+     }
+   }, 2000);
+  });
+});
