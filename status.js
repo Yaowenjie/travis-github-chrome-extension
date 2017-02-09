@@ -3,16 +3,17 @@ document.styleSheets[0].insertRule('.travis-ci{display:inline-block;margin-left:
 document.styleSheets[0].insertRule('.travis-ci:hover{opacity:1}', 1);
 document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 
-var selectors =[
+var selectors = [
   'h1.public > strong > a',
-  '.js-repo-filter h3 a:first-child'
+  '.js-repo-filter h3 a:first-child',
+  '.org-repos .d-inline-block a'
 ];
 var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
 
 function showBadge() {
   selectors.forEach(function(sel) {
     $(sel).each(function() {
-        insertStatusIcon(this, this.pathname);
+      insertStatusIcon(this, this.pathname);
     });
   });
   $(repoListSelectors).each(function() {
