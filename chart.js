@@ -1,38 +1,33 @@
- var bodyBgColor = $("body").css("background-color");
- var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
- var githubGrey = "#68777d";
- var globalFontFamily = "arial, sans-serif";
- // Get URL for the travis-ci icon.
- var travisIcon = chrome.extension.getURL("/travis-icon.png");
- // Generate the Chart elements.
- var chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
-           "<h5><img src='" + travisIcon + "' height='20' style='vertical-align: middle;'>" +
-           " Travis-CI Build Chart</h5>" +
-          "</div>" +
-          "<div id='chartContainer' class='overall-summary' style='height: 300px; width: 100%;'></div>");
- var bIsChartRendered = false;
+var bodyBgColor = $("body").css("background-color");
+var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
+var githubGrey = "#68777d";
+var globalFontFamily = "arial, sans-serif";
+// Get URL for the travis-ci icon.
+var travisIcon = chrome.extension.getURL("/travis-icon.png");
+// Generate the Chart elements.
+var chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
+         "<h5><img src='" + travisIcon + "' height='20' style='vertical-align: middle;'>" +
+         " Travis-CI Build Chart</h5>" +
+        "</div>" +
+        "<div id='chartContainer' class='overall-summary' style='height: 300px; width: 100%;'></div>");
+var bIsChartRendered = false;
 
 function showChart(isFirstTime) {
   var overallDiv = $("div.file-navigation.in-mid-page");
-
   if (overallDiv.length !== 0) {
     var ownerAndProject = $("h1.public > strong > a")[0].pathname;
     var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
 
-    /* Getting Data from travis-ci api */
-  	$.getJSON(jsonPath, function(data) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', jsonPath, true);
+
+    xhr.onload = function () {
+      data = JSON.parse(xhr.responseText);
   		if (data.length >= 1) {
   			var range = (data.length < 10) ? data.length : 10;
   			chartDiv.insertAfter(overallDiv[0]);
 
   			var info = getInfoFromJson(data, range);
-
-  			for (var i=range; i<10; i++) {
-  				if(typeof info.buildNum[i] === "undefined") {
-  					info.buildNum[i] = "#";
-  				}
-  			}
-
   			var chart = buildChart(info, data);
 
         if (!isFirstTime) {
@@ -48,29 +43,34 @@ function showChart(isFirstTime) {
         }
 
         if (isFirstTime) {
-          // Attach the chart header click event
-          $("#chartHeader").click(function(e) {
-            var chartDiv = $(this).next("#chartContainer");
-            // Toggle the chartContainer visibility
-            chartDiv.slideToggle(150,
-              function() {
-                // Record the current visibility state
-                localStorage["chartHeaderHidden"] = $(chartDiv).is(":hidden");
-
-                // Render the chart if we haven't done so already and record that it has been rendered
-                if (!bIsChartRendered) {
-                  bIsChartRendered = true;
-                  chart.render();
-                }
-              });
-          });
+          bindToggleToHeader(chart);
         }
   		}
-  	});
+    }
+    xhr.send();
   }
 }
 
+function bindToggleToHeader(chart) {
+  // Attach the chart header click event
+  $("#chartHeader").click(function(e) {
+    var chartDiv = $(this).next("#chartContainer");
+    // Toggle the chartContainer visibility
+    chartDiv.slideToggle(150,
+      function() {
+        // Record the current visibility state
+        localStorage["chartHeaderHidden"] = $(chartDiv).is(":hidden");
+        // Render the chart if we haven't done so already and record that it has been rendered
+        if (!bIsChartRendered) {
+          bIsChartRendered = true;
+          chart.render();
+        }
+      });
+  });
+}
+
 function buildChart(info, data) {
+  var ownerAndProject = $("h1.public > strong > a")[0].pathname;
   function onClick(e) {
    var order = 9 - e.dataPoint.x;
    window.open('https://travis-ci.org' + ownerAndProject + '/builds/' + data[order]["id"], '_blank');
@@ -147,12 +147,12 @@ function getInfoFromJson(data, range) {
     if (buildState === "started") {
       buildColor.push(allColor[2]);
       if (buildStarted && buildFinished === null) {
-          var skipTime = (new Date() - new Date(buildStarted))/1000;
-          var skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
-          buildTime[i] = Math.round(skipTime/60*100)/100;
-          buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        var skipTime = (new Date() - new Date(buildStarted))/1000;
+        var skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
+        buildTime[i] = Math.round(skipTime/60*100)/100;
+        buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
       } else {
-          buildInfo[i] = "Oops, the build may be cancelled.<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        buildInfo[i] = "Oops, the build may be cancelled.<br/><span><b>Message:</b>" + buildMessage + "</span>";
       }
     } else {
       buildResult = (buildResult === null) ? 1 : buildResult;
@@ -164,6 +164,13 @@ function getInfoFromJson(data, range) {
   info.buildTime = buildTime;
   info.buildColor = buildColor;
   info.buildInfo = buildInfo;
+
+  for (var i=range; i<10; i++) {
+    if(typeof info.buildNum[i] === "undefined") {
+      info.buildNum[i] = "#";
+    }
+  }
+
   return info;
 }
 
@@ -184,6 +191,6 @@ $(document).ready(function() {
       if (isChartNonexisted() && isNotChartHeader(event)) {
         showChart(false);
       }
-    }, 3000);
+    }, 2500);
   });
 });

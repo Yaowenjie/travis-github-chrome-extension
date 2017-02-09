@@ -11,9 +11,9 @@ var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
 
 function showBadge() {
   selectors.forEach(function(sel) {
-      $(sel).each(function() {
-          insertStatusIcon(this, this.pathname);
-      });
+    $(sel).each(function() {
+        insertStatusIcon(this, this.pathname);
+    });
   });
   $(repoListSelectors).each(function() {
     var project = $(this).siblings('span').children('a').attr('href');
@@ -22,13 +22,23 @@ function showBadge() {
 }
 
 function insertStatusIcon(el, project) {
-  var img = $("<img src='https://api.travis-ci.org" + project + ".svg' alt='build status'></img>");
-
-  img.load(function() {
-      var link = $("<a class='travis-ci' href='https://travis-ci.org" + project + "'></a>");
-      link.append(img);
-      link.appendTo($(el));
-  });
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.travis-ci.org' + project + '.svg', true);
+  xhr.responseType = 'blob';
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState == XMLHttpRequest.DONE) {
+      xhr.onload = function(e) {
+        var img = $("<img alt='build status'></img>");
+        img.attr('src', window.URL.createObjectURL(this.response));
+        img.load(function() {
+          var link = $("<a class='travis-ci' href='https://travis-ci.org" + project + "'></a>");
+          link.append(img);
+          link.appendTo($(el));
+        });
+      };
+    }
+  }
+  xhr.send();
 }
 
 function isBadgeNonexisted() {

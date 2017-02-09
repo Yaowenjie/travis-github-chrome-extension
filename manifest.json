@@ -1,8 +1,6 @@
 {
   "manifest_version": 2,
-
   "web_accessible_resources": ["travis-icon.png"],
-
   "version": "2.0.12",
   "name": "Github Travis Stat",
   "short_name": "build-stat",
@@ -12,7 +10,10 @@
     "48":  "icon-48.png",
     "128": "icon-128.png"
   },
-
+  "permissions": [
+    "https://api.travis-ci.org/"
+  ],
+  "content_security_policy": "script-src 'self' https://github.com; object-src 'self'",
   "content_scripts": [ {
     "js":      [ "jquery-1.8.3.min.js", "canvasjs.min.js", "status.js", "chart.js"],
     "matches": [ "https://github.com/*" ],
