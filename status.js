@@ -6,7 +6,8 @@ document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 var selectors = [
   'h1.public > strong > a',
   '.js-repo-filter h3 a:first-child',
-  '.org-repos .d-inline-block a'
+  '.org-repos .d-inline-block a',
+  '.codesearch-results .d-inline-block a'
 ];
 var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
 
