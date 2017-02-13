@@ -1,0 +1,30 @@
+{
+  "name": "github-travis-chrome-extension",
+  "version": "2.1.0",
+  "description": "Display travis-ci build status and time chart, with status icon next to the project name on github.",
+  "main": "chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yaowenjie/travis-github-chrome-extension.git"
+  },
+  "keywords": [
+    "Travis-CI",
+    "github",
+    "build",
+    "status",
+    "chart"
+  ],
+  "author": "Yaowenjie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yaowenjie/travis-github-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/Yaowenjie/travis-github-chrome-extension#readme",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-zip": "^4.0.0"
+  }
+}
