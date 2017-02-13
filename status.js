@@ -4,12 +4,13 @@ document.styleSheets[0].insertRule('.travis-ci:hover{opacity:1}', 1);
 document.styleSheets[0].insertRule('.travis-ci img{display:block;}', 1);
 
 var selectors = [
-  'h1.public > strong > a',
-  '.js-repo-filter h3 a:first-child',
-  '.org-repos .d-inline-block a',
-  '.codesearch-results .d-inline-block a'
+  'h1.public > strong > a',                     //Specific repository
+  '.js-repo-filter h3 a:first-child',           //Repositories & Stars
+  '.org-repos .d-inline-block a',               //Organization
+  '.codesearch-results .d-inline-block a',      //Search
+  '.explore-pjax-container .explore-content a'  //Trending
 ];
-var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0';
+var repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0'; //Overview
 
 function showBadge() {
   selectors.forEach(function(sel) {
