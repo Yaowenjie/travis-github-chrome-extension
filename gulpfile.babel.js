@@ -1,6 +1,6 @@
-var gulp = require("gulp"),
-    zip = require("gulp-zip"),
-    flatten = require('gulp-flatten');
+import gulp from 'gulp';
+import zip from 'gulp-zip';
+import flatten from 'gulp-flatten';
 
 const DIST_PATH = "dist";
 const DEST_PATH = "builds";
