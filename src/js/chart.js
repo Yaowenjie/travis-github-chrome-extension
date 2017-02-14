@@ -1,34 +1,34 @@
-var bodyBgColor = $("body").css("background-color");
-var allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
-var githubGrey = "#68777d";
-var globalFontFamily = "arial, sans-serif";
+const bodyBgColor = $("body").css("background-color");
+const allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
+const githubGrey = "#68777d";
+const globalFontFamily = "arial, sans-serif";
 // Get URL for the travis-ci icon.
-var travisIcon = chrome.extension.getURL("/travis-icon.png");
-// Generate the Chart elements.
-var chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
+const travisIcon = chrome.extension.getURL("/travis-icon.png");
+// Generate the chart elements.
+const chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
          "<h5><img src='" + travisIcon + "' height='20' style='vertical-align: middle;'>" +
          " Travis-CI Build Chart</h5>" +
         "</div>" +
         "<div id='chartContainer' class='overall-summary' style='height: 300px; width: 100%;'></div>");
-var bIsChartRendered = false;
+let bIsChartRendered = false;
 
-function showChart(isFirstTime) {
-  var overallDiv = $("div.file-navigation.in-mid-page");
+const showChart = (isFirstTime) => {
+  const overallDiv = $("div.file-navigation.in-mid-page");
   if (overallDiv.length !== 0) {
-    var ownerAndProject = $("h1.public > strong > a")[0].pathname;
-    var jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
+    let ownerAndProject = $("h1.public > strong > a")[0].pathname;
+    let jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
 
-    var xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
     xhr.open('GET', jsonPath, true);
 
     xhr.onload = function () {
-      data = JSON.parse(xhr.responseText);
+      let data = JSON.parse(xhr.responseText);
   		if (data.length >= 1) {
-  			var range = (data.length < 10) ? data.length : 10;
+  			let range = (data.length < 10) ? data.length : 10;
   			chartDiv.insertAfter(overallDiv[0]);
 
-  			var info = getInfoFromJson(data, range);
-  			var chart = buildChart(info, data);
+  			let info = getInfoFromJson(data, range);
+  			let chart = buildChart(info, data);
 
         if (!isFirstTime) {
           bIsChartRendered = true;
@@ -46,18 +46,18 @@ function showChart(isFirstTime) {
           bindToggleToHeader(chart);
         }
   		}
-    }
+    };
     xhr.send();
   }
-}
+};
 
-function bindToggleToHeader(chart) {
+const bindToggleToHeader = (chart) => {
   // Attach the chart header click event
   $("#chartHeader").click(function(e) {
-    var chartDiv = $(this).next("#chartContainer");
+    let chartDiv = $(this).next("#chartContainer");
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150,
-      function() {
+      () => {
         // Record the current visibility state
         localStorage["chartHeaderHidden"] = $(chartDiv).is(":hidden");
         // Render the chart if we haven't done so already and record that it has been rendered
@@ -67,14 +67,14 @@ function bindToggleToHeader(chart) {
         }
       });
   });
-}
+};
 
-function buildChart(info, data) {
-  var ownerAndProject = $("h1.public > strong > a")[0].pathname;
-  function onClick(e) {
-   var order = 9 - e.dataPoint.x;
+const buildChart = (info, data) => {
+  let ownerAndProject = $("h1.public > strong > a")[0].pathname;
+  const onClick = (e) => {
+   let order = 9 - e.dataPoint.x;
    window.open('https://travis-ci.org' + ownerAndProject + '/builds/' + data[order]["id"], '_blank');
-  }
+  };
 
   return new CanvasJS.Chart("chartContainer", {
     width: document.getElementById('chartHeader').clientWidth,
@@ -119,24 +119,24 @@ function buildChart(info, data) {
         ]
     }]
   });
-}
+};
 
-function getInfoFromJson(data, range) {
-  var buildNum = [];
-  var buildTime = [];
-  var buildColor = [];
-  var buildInfo = [];
-  var info = {};
+const getInfoFromJson = (data, range) => {
+  let buildNum = [];
+  let buildTime = [];
+  let buildColor = [];
+  let buildInfo = [];
+  let info = {};
 
-  for (var i = 0; i < range; i++) {
-    var buildId = data[i]["id"];
-    var buildDuration = data[i]["duration"];
-    var buildState = data[i]["state"];
-    var buildResult = data[i]["result"];
-    var buildMessage = data[i]["message"];
-    var buildStarted = data[i]["started_at"];
-    var buildFinished = data[i]["finished_at"];
-    var buildTimeStr = Math.floor(buildDuration/60) + "min" + Math.floor(buildDuration%60) + "s";
+  for (let i = 0; i < range; i++) {
+    let buildId = data[i]["id"];
+    let buildDuration = data[i]["duration"];
+    let buildState = data[i]["state"];
+    let buildResult = data[i]["result"];
+    let buildMessage = data[i]["message"];
+    let buildStarted = data[i]["started_at"];
+    let buildFinished = data[i]["finished_at"];
+    let buildTimeStr = Math.floor(buildDuration/60) + "min" + Math.floor(buildDuration%60) + "s";
 
     buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + "...") : buildMessage;
 
@@ -147,8 +147,8 @@ function getInfoFromJson(data, range) {
     if (buildState === "started") {
       buildColor.push(allColor[2]);
       if (buildStarted && buildFinished === null) {
-        var skipTime = (new Date() - new Date(buildStarted))/1000;
-        var skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
+        let skipTime = (new Date() - new Date(buildStarted))/1000;
+        let skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
         buildTime[i] = Math.round(skipTime/60*100)/100;
         buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
       } else {
@@ -165,29 +165,29 @@ function getInfoFromJson(data, range) {
   info.buildColor = buildColor;
   info.buildInfo = buildInfo;
 
-  for (var i=range; i<10; i++) {
+  for (let i=range; i<10; i++) {
     if(typeof info.buildNum[i] === "undefined") {
       info.buildNum[i] = "#";
     }
   }
 
   return info;
-}
+};
 
-function isChartNonexisted() {
+const isChartNonexisted = () => {
   return $("#chartContainer").length === 0;
-}
+};
 
-function isNotChartHeader(event) {
+const isNotChartHeader = (event) => {
   return $(event.target).text().indexOf('Travis-CI Build Chart') === -1;
-}
+};
 
 showChart(true);
 
-$(document).ready(function() {
+$(document).ready(() => {
   // When user clicks anywhere except chart header, show the Chart!
-  $('body').mouseup(function(event) {
-    setTimeout(function() {
+  $('body').mouseup((event) => {
+    setTimeout(() => {
       if (isChartNonexisted() && isNotChartHeader(event)) {
         showChart(false);
       }
