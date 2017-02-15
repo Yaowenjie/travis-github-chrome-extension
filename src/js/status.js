@@ -26,15 +26,15 @@ const showBadge = () => {
 
 const insertStatusIcon = (el, project) => {
   let xhr = new XMLHttpRequest();
-  xhr.open('GET', 'https://api.travis-ci.org' + project + '.svg', true);
+  xhr.open('GET', `https://api.travis-ci.org${project}.svg`, true);
   xhr.responseType = 'blob';
   xhr.onreadystatechange = () => {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       xhr.onload = function() {
-        let img = $("<img alt='build status'></img>");
+        const img = $("<img alt='build status'></img>");
         img.attr('src', window.URL.createObjectURL(this.response));
         img.load(() => {
-          let link = $("<a class='travis-ci' href='https://travis-ci.org" + project + "'></a>");
+          const link = $(`<a class='travis-ci' href='https://travis-ci.org${project}'></a>`);
           link.append(img);
           link.appendTo($(el));
         });

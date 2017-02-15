@@ -10,20 +10,21 @@ const chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100
          " Travis-CI Build Chart</h5>" +
         "</div>" +
         "<div id='chartContainer' class='overall-summary' style='height: 300px; width: 100%;'></div>");
+
 let bIsChartRendered = false;
 
 const showChart = (isFirstTime) => {
   const overallDiv = $("div.file-navigation.in-mid-page");
   if (overallDiv.length !== 0) {
-    let ownerAndProject = $("h1.public > strong > a")[0].pathname;
-    let jsonPath = 'https://api.travis-ci.org/repositories' + ownerAndProject + '/builds.json';
+    const ownerAndProject = $("h1.public > strong > a")[0].pathname;
+    const jsonPath = `https://api.travis-ci.org/repositories${ownerAndProject}/builds.json`;
 
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.open('GET', jsonPath, true);
 
     xhr.onload = function () {
       let data = JSON.parse(xhr.responseText);
-  		if (data.length >= 1) {
+  		if (data.length) {
   			let range = (data.length < 10) ? data.length : 10;
   			chartDiv.insertAfter(overallDiv[0]);
 
@@ -54,7 +55,7 @@ const showChart = (isFirstTime) => {
 const bindToggleToHeader = (chart) => {
   // Attach the chart header click event
   $("#chartHeader").click(function(e) {
-    let chartDiv = $(this).next("#chartContainer");
+    const chartDiv = $(this).next("#chartContainer");
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150,
       () => {
@@ -70,10 +71,10 @@ const bindToggleToHeader = (chart) => {
 };
 
 const buildChart = (info, data) => {
-  let ownerAndProject = $("h1.public > strong > a")[0].pathname;
+  const ownerAndProject = $("h1.public > strong > a")[0].pathname;
   const onClick = (e) => {
    let order = 9 - e.dataPoint.x;
-   window.open('https://travis-ci.org' + ownerAndProject + '/builds/' + data[order]["id"], '_blank');
+   window.open(`https://travis-ci.org${ownerAndProject}/builds/${data[order]["id"]}`, '_blank');
   };
 
   return new CanvasJS.Chart("chartContainer", {
@@ -115,44 +116,49 @@ const buildChart = (info, data) => {
           { label: info.buildNum[3], y: info.buildTime[3], color: info.buildColor[3], toolTipContent: info.buildInfo[3], click: onClick, cursor: "pointer" },
           { label: info.buildNum[2], y: info.buildTime[2], color: info.buildColor[2], toolTipContent: info.buildInfo[2], click: onClick, cursor: "pointer" },
           { label: info.buildNum[1], y: info.buildTime[1], color: info.buildColor[1], toolTipContent: info.buildInfo[1], click: onClick, cursor: "pointer" },
-          { label: "Current:" + info.buildNum[0],	y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0], click: onClick, cursor: "pointer" }
+          { label: `Current:${info.buildNum[0]}`,	y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0], click: onClick, cursor: "pointer" }
         ]
     }]
   });
 };
 
+const trimTime = (buildDuration) => {
+  var minNum = Math.floor(buildDuration / 60);
+  var secNum = Math.floor(buildDuration % 60);
+  return `${minNum}min${secNum}s`;
+};
+
 const getInfoFromJson = (data, range) => {
-  let buildNum = [];
-  let buildTime = [];
-  let buildColor = [];
-  let buildInfo = [];
+  let buildNum = [],
+      buildTime = [],
+      buildColor = [],
+      buildInfo = [];
   let info = {};
 
   for (let i = 0; i < range; i++) {
-    let buildId = data[i]["id"];
     let buildDuration = data[i]["duration"];
     let buildState = data[i]["state"];
     let buildResult = data[i]["result"];
     let buildMessage = data[i]["message"];
     let buildStarted = data[i]["started_at"];
     let buildFinished = data[i]["finished_at"];
-    let buildTimeStr = Math.floor(buildDuration/60) + "min" + Math.floor(buildDuration%60) + "s";
+    let buildTimeStr = trimTime(buildDuration);
 
     buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + "...") : buildMessage;
 
-    buildNum.push("#" + data[i]["number"]);
-    buildInfo.push("<b>Build Time</b>: " + buildTimeStr + "<br/><span><b>Message: </b>" + buildMessage + "</span>");
+    buildNum.push(`#${data[i]["number"]}`);
+    buildInfo.push(`<b>Build Time</b>: ${buildTimeStr}<br/><span><b>Message: </b>${buildMessage}</span>`);
     buildTime.push(Math.round(buildDuration/60*100)/100);
 
     if (buildState === "started") {
       buildColor.push(allColor[2]);
       if (buildStarted && buildFinished === null) {
         let skipTime = (new Date() - new Date(buildStarted))/1000;
-        let skipTimeStr = Math.floor(skipTime/60) + "min" + Math.floor(skipTime%60) + "s";
+        let skipTimeStr = trimTime(skipTime);
         buildTime[i] = Math.round(skipTime/60*100)/100;
-        buildInfo[i] = "It's running! <b>Skipped time</b>:" + skipTimeStr + "<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        buildInfo[i] = `It's running! <b>Skipped time</b>:${skipTimeStr}<br/><span><b>Message:</b>${buildMessage}</span>`;
       } else {
-        buildInfo[i] = "Oops, the build may be cancelled.<br/><span><b>Message:</b>" + buildMessage + "</span>";
+        buildInfo[i] = `Oops, the build may be cancelled.<br/><span><b>Message:</b>${buildMessage}</span>`;
       }
     } else {
       buildResult = (buildResult === null) ? 1 : buildResult;
