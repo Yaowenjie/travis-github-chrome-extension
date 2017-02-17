@@ -8,6 +8,7 @@ import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import runSequence from 'run-sequence';
 import eslint from 'gulp-eslint';
+import mocha from 'gulp-mocha';
 
 const DIST_PATH = "dist";
 const DEST_PATH = "builds";
@@ -49,13 +50,23 @@ gulp.task('copy', () => {
     .pipe(gulp.dest(DIST_PATH));
 });
 
+gulp.task('test', () => {
+  return gulp.src(["test/**/*.js"])
+    .pipe(mocha({
+      compilers: {
+        js: 'babel-core/register'
+      }
+    }))
+    .pipe(gulp.dest(DIST_PATH));
+});
+
 gulp.task('clean', () => {
   return gulp.src(DIST_PATH, {read: false})
     .pipe(clean());
 });
 
 gulp.task('lint', () => {
-  return gulp.src(['src/**/*.js', '!src/js/lib/*.js'])
+  return gulp.src(['src/**/*.js', '!src/js/lib/*.js', 'test/**/*.js'])
     .pipe(eslint())
     .pipe(eslint.format())
     .pipe(eslint.failOnError());
