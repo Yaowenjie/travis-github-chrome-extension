@@ -1,3 +1,7 @@
+import {trimTime} from './common/util';
+import $ from 'jquery';
+import './lib/canvasjs.min';
+
 const bodyBgColor = $("body").css("background-color");
 const allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
 const githubGrey = "#68777d";
@@ -122,12 +126,6 @@ const buildChart = (info, data) => {
   });
 };
 
-const trimTime = (buildDuration) => {
-  var minNum = Math.floor(buildDuration / 60);
-  var secNum = Math.floor(buildDuration % 60);
-  return `${minNum}min${secNum}s`;
-};
-
 const getInfoFromJson = (data, range) => {
   let buildNum = [],
       buildTime = [],
@@ -188,15 +186,4 @@ const isNotChartHeader = (event) => {
   return $(event.target).text().indexOf('Travis-CI Build Chart') === -1;
 };
 
-showChart(true);
-
-$(document).ready(() => {
-  // When user clicks anywhere except chart header, show the Chart!
-  $('body').mouseup((event) => {
-    setTimeout(() => {
-      if (isChartNonexisted() && isNotChartHeader(event)) {
-        showChart(false);
-      }
-    }, 2500);
-  });
-});
+export {showChart, isChartNonexisted, isNotChartHeader};

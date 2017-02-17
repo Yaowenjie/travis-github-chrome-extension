@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 /* Insert the css code */
 document.styleSheets[0].insertRule('.travis-ci{display:inline-block;margin-left:8px;line-height:1em;position:relative;top:3px;opacity:.85;}', 1);
 document.styleSheets[0].insertRule('.travis-ci:hover{opacity:1}', 1);
@@ -33,7 +35,7 @@ const insertStatusIcon = (el, project) => {
       xhr.onload = function() {
         const img = $("<img alt='build status'></img>");
         img.attr('src', window.URL.createObjectURL(this.response));
-        img.load(() => {
+        img.on('load', () => {
           const link = $(`<a class='travis-ci' href='https://travis-ci.org${project}'></a>`);
           link.append(img);
           link.appendTo($(el));
@@ -48,15 +50,4 @@ const isBadgeNonexisted = () => {
   return $(".travis-ci").length === 0;
 };
 
-showBadge();
-
-$(document).ready(() => {
-  // When user clicks anywhere, show the Travis Badge!
-  $('body').mouseup(() => {
-   setTimeout(() => {
-     if (isBadgeNonexisted()) {
-       showBadge();
-     }
-   }, 2000);
-  });
-});
+export {showBadge, isBadgeNonexisted};
