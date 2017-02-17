@@ -19,6 +19,7 @@ gulp.task('default', ['clean'], () => {
 
 gulp.task('watch', ['default'], () => {
   gulp.watch('src/**/*.js', ['lint', 'bundle']);
+  gulp.watch('test/**/*.js', ['lint', 'test']);
   gulp.watch(["src/imgs/*", "src/*.json"], ['copy']);
 });
 

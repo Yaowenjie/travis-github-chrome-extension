@@ -26,7 +26,7 @@ const showChart = (isFirstTime) => {
     const xhr = new XMLHttpRequest();
     xhr.open('GET', jsonPath, true);
 
-    xhr.onload = function () {
+    xhr.onload = () => {
       let data = JSON.parse(xhr.responseText);
   		if (data.length) {
   			let range = (data.length < 10) ? data.length : 10;
@@ -58,8 +58,8 @@ const showChart = (isFirstTime) => {
 
 const bindToggleToHeader = (chart) => {
   // Attach the chart header click event
-  $('#chartHeader').click(function(e) {
-    const chartDiv = $(this).next('#chartContainer');
+  $('#chartHeader').click(() => {
+    const chartDiv = $('#chartHeader').next('#chartContainer');
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150,
       () => {
