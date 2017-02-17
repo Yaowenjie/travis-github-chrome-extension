@@ -2,25 +2,25 @@ import {trimTime} from './common/util';
 import $ from 'jquery';
 import './lib/canvasjs.min';
 
-const bodyBgColor = $("body").css("background-color");
+const bodyBgColor = $('body').css('background-color');
 const allColor = ['#39aa56', '#db4545', '#f1e05a']; // green, red, yellow
-const githubGrey = "#68777d";
-const globalFontFamily = "arial, sans-serif";
+const githubGrey = '#68777d';
+const globalFontFamily = 'arial, sans-serif';
 // Get URL for the travis-ci icon.
-const travisIcon = chrome.extension.getURL("/travis-icon.png");
+const travisIcon = chrome.extension.getURL('/travis-icon.png');
 // Generate the chart elements.
 const chartDiv = $("<div id='chartHeader' class='commit-tease' style='width: 100%; padding: 5px 10px; cursor: pointer;'>" +
-         "<h5><img src='" + travisIcon + "' height='20' style='vertical-align: middle;'>" +
-         " Travis-CI Build Chart</h5>" +
-        "</div>" +
-        "<div id='chartContainer' class='overall-summary' style='height: 300px; width: 100%;'></div>");
+         `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">` +
+         ' Travis-CI Build Chart</h5>' +
+        '</div>' +
+        '<div id="chartContainer" class="overall-summary" style="height: 300px; width: 100%;"></div>');
 
 let bIsChartRendered = false;
 
 const showChart = (isFirstTime) => {
-  const overallDiv = $("div.file-navigation.in-mid-page");
+  const overallDiv = $('div.file-navigation.in-mid-page');
   if (overallDiv.length !== 0) {
-    const ownerAndProject = $("h1.public > strong > a")[0].pathname;
+    const ownerAndProject = $('h1.public > strong > a')[0].pathname;
     const jsonPath = `https://api.travis-ci.org/repositories${ownerAndProject}/builds.json`;
 
     const xhr = new XMLHttpRequest();
@@ -38,9 +38,9 @@ const showChart = (isFirstTime) => {
         if (!isFirstTime) {
           bIsChartRendered = true;
           chart.render();
-        } else if (localStorage["chartHeaderHidden"] === "true") {
+        } else if (localStorage['chartHeaderHidden'] === 'true') {
           // Hide the chartContainer element if previously hidden
-          $("#chartContainer").hide();
+          $('#chartContainer').hide();
         } else {
           // Otherwise we render the Chart and record that it has been rendered
           bIsChartRendered = true;
@@ -58,13 +58,13 @@ const showChart = (isFirstTime) => {
 
 const bindToggleToHeader = (chart) => {
   // Attach the chart header click event
-  $("#chartHeader").click(function(e) {
-    const chartDiv = $(this).next("#chartContainer");
+  $('#chartHeader').click(function(e) {
+    const chartDiv = $(this).next('#chartContainer');
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150,
       () => {
         // Record the current visibility state
-        localStorage["chartHeaderHidden"] = $(chartDiv).is(":hidden");
+        localStorage['chartHeaderHidden'] = $(chartDiv).is(':hidden');
         // Render the chart if we haven't done so already and record that it has been rendered
         if (!bIsChartRendered) {
           bIsChartRendered = true;
@@ -75,52 +75,52 @@ const bindToggleToHeader = (chart) => {
 };
 
 const buildChart = (info, data) => {
-  const ownerAndProject = $("h1.public > strong > a")[0].pathname;
+  const ownerAndProject = $('h1.public > strong > a')[0].pathname;
   const onClick = (e) => {
    let order = 9 - e.dataPoint.x;
-   window.open(`https://travis-ci.org${ownerAndProject}/builds/${data[order]["id"]}`, '_blank');
+   window.open(`https://travis-ci.org${ownerAndProject}/builds/${data[order]['id']}`, '_blank');
   };
 
-  return new CanvasJS.Chart("chartContainer", {
+  return new CanvasJS.Chart('chartContainer', {
     width: document.getElementById('chartHeader').clientWidth,
     height: 298,
     backgroundColor: bodyBgColor,
     animationEnabled: true,
     title: {
-      text: "Build Status (Recent 10 builds)",
+      text: 'Build Status (Recent 10 builds)',
       fontFamily: globalFontFamily,
-      fontWeight: "normal",
+      fontWeight: 'normal',
       fontColor: githubGrey,
       fontSize: 20
     },
     axisX: {
-      title: "Build Number",
+      title: 'Build Number',
       titleFontFamily: globalFontFamily,
-      titleFontWeight: "normal",
+      titleFontWeight: 'normal',
       titleFontSize: 12
     },
     axisY: {
-      title: "Build Time (Minutes)",
+      title: 'Build Time (Minutes)',
       titleFontFamily: globalFontFamily,
-      titleFontWeight: "normal",
+      titleFontWeight: 'normal',
       titleFontSize: 12
     },
     toolTip:{
       fontFamily: globalFontFamily
     },
     data: [{
-        type: "column", //change type to bar, line, area, pie, etc
+        type: 'column', //change type to bar, line, area, pie, etc
         dataPoints: [
-          { label: info.buildNum[9], y: info.buildTime[9], color: info.buildColor[9], toolTipContent: info.buildInfo[9], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[8], y: info.buildTime[8], color: info.buildColor[8], toolTipContent: info.buildInfo[8], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[7], y: info.buildTime[7], color: info.buildColor[7], toolTipContent: info.buildInfo[7], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[6], y: info.buildTime[6], color: info.buildColor[6], toolTipContent: info.buildInfo[6], click: onClick, cursor: "pointer"},
-          { label: info.buildNum[5], y: info.buildTime[5], color: info.buildColor[5], toolTipContent: info.buildInfo[5], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[4], y: info.buildTime[4], color: info.buildColor[4], toolTipContent: info.buildInfo[4], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[3], y: info.buildTime[3], color: info.buildColor[3], toolTipContent: info.buildInfo[3], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[2], y: info.buildTime[2], color: info.buildColor[2], toolTipContent: info.buildInfo[2], click: onClick, cursor: "pointer" },
-          { label: info.buildNum[1], y: info.buildTime[1], color: info.buildColor[1], toolTipContent: info.buildInfo[1], click: onClick, cursor: "pointer" },
-          { label: `Current:${info.buildNum[0]}`,	y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0], click: onClick, cursor: "pointer" }
+          { label: info.buildNum[9], y: info.buildTime[9], color: info.buildColor[9], toolTipContent: info.buildInfo[9], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[8], y: info.buildTime[8], color: info.buildColor[8], toolTipContent: info.buildInfo[8], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[7], y: info.buildTime[7], color: info.buildColor[7], toolTipContent: info.buildInfo[7], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[6], y: info.buildTime[6], color: info.buildColor[6], toolTipContent: info.buildInfo[6], click: onClick, cursor: 'pointer'},
+          { label: info.buildNum[5], y: info.buildTime[5], color: info.buildColor[5], toolTipContent: info.buildInfo[5], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[4], y: info.buildTime[4], color: info.buildColor[4], toolTipContent: info.buildInfo[4], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[3], y: info.buildTime[3], color: info.buildColor[3], toolTipContent: info.buildInfo[3], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[2], y: info.buildTime[2], color: info.buildColor[2], toolTipContent: info.buildInfo[2], click: onClick, cursor: 'pointer' },
+          { label: info.buildNum[1], y: info.buildTime[1], color: info.buildColor[1], toolTipContent: info.buildInfo[1], click: onClick, cursor: 'pointer' },
+          { label: `Current:${info.buildNum[0]}`,	y: info.buildTime[0], color: info.buildColor[0], toolTipContent: info.buildInfo[0], click: onClick, cursor: 'pointer' }
         ]
     }]
   });
@@ -134,21 +134,21 @@ const getInfoFromJson = (data, range) => {
   let info = {};
 
   for (let i = 0; i < range; i++) {
-    let buildDuration = data[i]["duration"];
-    let buildState = data[i]["state"];
-    let buildResult = data[i]["result"];
-    let buildMessage = data[i]["message"];
-    let buildStarted = data[i]["started_at"];
-    let buildFinished = data[i]["finished_at"];
+    let buildDuration = data[i]['duration'];
+    let buildState = data[i]['state'];
+    let buildResult = data[i]['result'];
+    let buildMessage = data[i]['message'];
+    let buildStarted = data[i]['started_at'];
+    let buildFinished = data[i]['finished_at'];
     let buildTimeStr = trimTime(buildDuration);
 
-    buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + "...") : buildMessage;
+    buildMessage = (buildMessage.length > 60) ? (buildMessage.slice(0, 60) + '...') : buildMessage;
 
-    buildNum.push(`#${data[i]["number"]}`);
+    buildNum.push(`#${data[i]['number']}`);
     buildInfo.push(`<b>Build Time</b>: ${buildTimeStr}<br/><span><b>Message: </b>${buildMessage}</span>`);
     buildTime.push(Math.round(buildDuration/60*100)/100);
 
-    if (buildState === "started") {
+    if (buildState === 'started') {
       buildColor.push(allColor[2]);
       if (buildStarted && buildFinished === null) {
         let skipTime = (new Date() - new Date(buildStarted))/1000;
@@ -170,8 +170,8 @@ const getInfoFromJson = (data, range) => {
   info.buildInfo = buildInfo;
 
   for (let i=range; i<10; i++) {
-    if(typeof info.buildNum[i] === "undefined") {
-      info.buildNum[i] = "#";
+    if(typeof info.buildNum[i] === 'undefined') {
+      info.buildNum[i] = '#';
     }
   }
 
@@ -179,7 +179,7 @@ const getInfoFromJson = (data, range) => {
 };
 
 const isChartNonexisted = () => {
-  return $("#chartContainer").length === 0;
+  return $('#chartContainer').length === 0;
 };
 
 const isNotChartHeader = (event) => {

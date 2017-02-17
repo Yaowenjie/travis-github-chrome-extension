@@ -47,7 +47,7 @@ const insertStatusIcon = (el, project) => {
 };
 
 const isBadgeNonexisted = () => {
-  return $(".travis-ci").length === 0;
+  return $('.travis-ci').length === 0;
 };
 
 export {showBadge, isBadgeNonexisted};

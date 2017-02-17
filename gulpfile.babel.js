@@ -7,6 +7,7 @@ import babelify from 'babelify';
 import source from 'vinyl-source-stream';
 import buffer from 'vinyl-buffer';
 import runSequence from 'run-sequence';
+import eslint from 'gulp-eslint';
 
 const DIST_PATH = "dist";
 const DEST_PATH = "builds";
@@ -16,7 +17,7 @@ gulp.task('default', ['clean'], () => {
 });
 
 gulp.task('watch', ['default'], () => {
-  gulp.watch('src/**/*.js', ['bundle']);
+  gulp.watch('src/**/*.js', ['lint', 'bundle']);
   gulp.watch(["src/imgs/*", "src/*.json"], ['copy']);
 });
 
@@ -51,4 +52,11 @@ gulp.task('copy', () => {
 gulp.task('clean', () => {
   return gulp.src(DIST_PATH, {read: false})
     .pipe(clean());
+});
+
+gulp.task('lint', () => {
+  return gulp.src(['src/**/*.js', '!src/js/lib/*.js'])
+    .pipe(eslint())
+    .pipe(eslint.format())
+    .pipe(eslint.failOnError());
 });
