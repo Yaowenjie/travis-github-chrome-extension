@@ -32,9 +32,7 @@ const insertStatusBadge = (element, project) => {
   xhr.responseType = 'blob';
   xhr.onreadystatechange = () => {
     if (xhr.readyState == XMLHttpRequest.DONE) {
-      xhr.onload = () => {
-        buildBadgeImg(xhr.response, project, element);
-      };
+      isBadgeNonexisted && buildBadgeImg(xhr.response, project, element);
     }
   };
   xhr.send();

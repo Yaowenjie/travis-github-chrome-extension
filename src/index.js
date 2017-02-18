@@ -1,5 +1,5 @@
 import {showChart, isChartNonexisted, isNotChartHeader} from './js/chart';
-import {showBadge, isBadgeNonexisted} from './js/status';
+import {showBadge, isBadgeNonexisted} from './js/badge';
 import $ from 'jquery';
 
 const FIRST_TIME = true;
@@ -17,6 +17,6 @@ $(document).ready(() => {
       if (isChartNonexisted() && isNotChartHeader(event)) {
         showChart(NON_FIRST_TIME);
       }
-    }, 2000);
+    }, 2500);
   });
 });
