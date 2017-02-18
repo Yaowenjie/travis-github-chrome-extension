@@ -3,18 +3,16 @@ import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY} from './common/cons
 import $ from 'jquery';
 import './lib/canvasjs.min';
 
+const travisIcon = chrome.extension.getURL('/travis-icon.png');
 const bodyBgColor = $('body').css('background-color');
 const allColor = [GREEN, RED, YELLOW];
 const columnAmount = 10;
-const travisIcon = chrome.extension.getURL('/travis-icon.png');
+let bIsChartRendered = false;
+
 // Generate the chart elements.
 const chartDiv = $('<div id="chartHeader" class="commit-tease" style="width: 100%; padding: 5px 10px; cursor: pointer;">' +
-         `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">` +
-         ' Travis-CI Build Chart</h5>' +
-        '</div>' +
-        '<div id="chartContainer" class="overall-summary" style="height: 300px; width: 100%;"></div>');
-
-let bIsChartRendered = false;
+  `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">Travis-CI Build Chart</h5></div>` +
+  '<div id="chartContainer" class="overall-summary" style="height: 300px; width: 100%;"></div>');
 
 const render = (chart) => {
   chart.render();
@@ -84,18 +82,18 @@ const assembleDataPoints = (info, data) => {
   };
 
   for (let i = columnAmount - 1; i >= 0; i--) {
-    let dataPoint = { label: (i === 0) ? `Latest:${info.buildNum[i]}` : info.buildNum[i],
-                      y: info.buildTime[i],
-                      color: info.buildColor[i],
-                      toolTipContent: info.buildInfo[i],
-                      click: onClick,
-                      cursor: 'pointer' };
+    let dataPoint = {
+      label: (i === 0) ? `Latest:${info.buildNum[i]}` : info.buildNum[i],
+      y: info.buildTime[i],
+      color: info.buildColor[i],
+      toolTipContent: info.buildInfo[i],
+      click: onClick,
+      cursor: 'pointer'
+    };
     dataPoints.push(dataPoint);
   }
-
   return dataPoints;
 };
-
 
 const buildChart = (info, data) => {
   return new CanvasJS.Chart('chartContainer', {
@@ -192,12 +190,4 @@ const getInfoFromJson = (data, range) => {
   return info;
 };
 
-const isChartNonexisted = () => {
-  return $('#chartContainer').length === 0;
-};
-
-const isNotChartHeader = (event) => {
-  return $(event.target).text().indexOf('Travis-CI Build Chart') === -1;
-};
-
-export {showChart, isChartNonexisted, isNotChartHeader};
+export {showChart};

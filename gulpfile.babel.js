@@ -10,8 +10,8 @@ import runSequence from 'run-sequence';
 import eslint from 'gulp-eslint';
 import mocha from 'gulp-mocha';
 
-const DIST_PATH = "dist";
-const DEST_PATH = "builds";
+const DIST_PATH = 'dist';
+const DEST_PATH = 'build';
 
 gulp.task('default', ['clean'], () => {
   gulp.start('copy', 'bundle')
@@ -57,8 +57,7 @@ gulp.task('test', () => {
       compilers: {
         js: 'babel-core/register'
       }
-    }))
-    .pipe(gulp.dest(DIST_PATH));
+    }));
 });
 
 gulp.task('clean', () => {
