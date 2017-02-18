@@ -15,35 +15,39 @@ const repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0'; //Overvie
 
 const showBadge = () => {
   selectors.forEach((sel) => {
-    $(sel).each((i, el) => {
-      insertStatusBadge(el, el.pathname);
+    $(sel).each((i, element) => {
+      insertStatusBadge(element, element.pathname);
     });
   });
-  $(repoListSelectors).each((i, el) => {
-    let project = $(el).siblings('span').children('a').attr('href');
-    insertStatusBadge(el, project);
+  $(repoListSelectors).each((i, element) => {
+    let project = $(element).siblings('span').children('a').attr('href');
+    insertStatusBadge(element, project);
   });
 };
 
-const insertStatusBadge = (el, project) => {
+const insertStatusBadge = (element, project) => {
   let xhr = new XMLHttpRequest();
-  var badgeUrl = `https://api.travis-ci.org${project}.svg`;
+  let badgeUrl = `https://api.travis-ci.org${project}.svg`;
   xhr.open('GET', badgeUrl, true);
   xhr.responseType = 'blob';
   xhr.onreadystatechange = () => {
     if (xhr.readyState == XMLHttpRequest.DONE) {
       xhr.onload = () => {
-        const img = $("<img alt='build status'></img>");
-        img.attr('src', window.URL.createObjectURL(xhr.response));
-        img.on('load', () => {
-          const link = $(`<a class='travis-ci' href='https://travis-ci.org${project}'></a>`);
-          link.append(img);
-          link.appendTo($(el));
-        });
+        buildBadgeImg(xhr.response, project, element);
       };
     }
   };
   xhr.send();
+};
+
+const buildBadgeImg = (response, project, element) => {
+  const img = $('<img alt="build status" />');
+  img.attr('src', window.URL.createObjectURL(response));
+  img.on('load', () => {
+    const link = $(`<a class='travis-ci' href='https://travis-ci.org${project}'></a>`);
+    link.append(img);
+    link.appendTo($(element));
+  });
 };
 
 const isBadgeNonexisted = () => {

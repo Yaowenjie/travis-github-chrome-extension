@@ -2,8 +2,11 @@ import {showChart, isChartNonexisted, isNotChartHeader} from './js/chart';
 import {showBadge, isBadgeNonexisted} from './js/status';
 import $ from 'jquery';
 
-showChart(true);
+const FIRST_TIME = true;
+const NON_FIRST_TIME = false;
+
 showBadge();
+showChart(FIRST_TIME);
 
 $(document).ready(() => {
   $('body').mouseup((event) => {
@@ -12,7 +15,7 @@ $(document).ready(() => {
         showBadge();
       }
       if (isChartNonexisted() && isNotChartHeader(event)) {
-        showChart(false);
+        showChart(NON_FIRST_TIME);
       }
     }, 2000);
   });
