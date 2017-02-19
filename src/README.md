@@ -12,7 +12,7 @@ After you install as above successfully, you can just run `gulp` to generate the
 However, during development, I recommend you use `gulp watch` to generate that dynamically (it will watch the change in js files).
 
 ## Build zip package
-Just run `gulp build`, you'll see the zip package in `builds` folder. It should be only used for me to publish in chrome extension webstore if no special circumstances. 
+Just run `gulp build`, you'll see the zip package in `build` folder. It should be only used for me to publish in chrome extension webstore if no special circumstances. 
 
 ## Test & Lint
 `gulp test` will run all unit tests, and `gulp lint` will check some basic js format/grammar. 

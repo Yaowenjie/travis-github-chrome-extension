@@ -9,6 +9,7 @@ import buffer from 'vinyl-buffer';
 import runSequence from 'run-sequence';
 import eslint from 'gulp-eslint';
 import mocha from 'gulp-mocha';
+import gp_uglify from 'gulp-uglify';
 
 const DIST_PATH = 'dist';
 const DEST_PATH = 'build';
@@ -42,6 +43,7 @@ gulp.task('bundle', () => {
     .bundle()
     .pipe(source('bundle.js'))
     .pipe(buffer())
+    .pipe(gp_uglify())
     .pipe(gulp.dest(DIST_PATH));
 });
 
