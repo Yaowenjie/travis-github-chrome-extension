@@ -31,11 +31,9 @@ const showChart = (isFirstTime) => {
         let info = getInfoFromJson(data, range);
         let chart = buildChart(info, data);
 
+        unbindToggleToHeader();
         renderOrHideChart(isFirstTime, chart);
-
-        if (isFirstTime) {
-          bindToggleToHeader(chart);
-        }
+        bindToggleToHeader(chart);
       }
     };
     xhr.send();
@@ -70,6 +68,10 @@ const bindToggleToHeader = (chart) => {
       }
     });
   });
+};
+
+const unbindToggleToHeader = () => {
+  $('#chartHeader').unbind('click');
 };
 
 const assembleDataPoints = (info, data) => {
