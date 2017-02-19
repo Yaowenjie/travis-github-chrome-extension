@@ -1,18 +1,46 @@
 import {trimTimeStr, trimMessage, trimTimeToMinScale} from './common/util';
-import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY} from './common/constants';
+import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY, COLUMN_AMOUNT} from './common/constants';
 import $ from 'jquery';
 import './lib/canvasjs.min';
 
 const travisIcon = chrome.extension.getURL('/travis-icon.png');
 const bodyBgColor = $('body').css('background-color');
 const allColor = [GREEN, RED, YELLOW];
-const columnAmount = 10;
 let bIsChartRendered = false;
 
 // Generate the chart elements.
 const chartDiv = $('<div id="chartHeader" class="commit-tease" style="width: 100%; padding: 5px 10px; cursor: pointer;">' +
   `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">Travis-CI Build Chart</h5></div>` +
   '<div id="chartContainer" class="overall-summary" style="height: 300px; width: 100%;"></div>');
+
+const showChart = (isFirstTime) => {
+  const overallDiv = $('div.file-navigation.in-mid-page');
+  if (overallDiv.length !== 0) {
+    const ownerAndProject = $('h1.public > strong > a')[0].pathname;
+    const jsonPath = `https://api.travis-ci.org/repositories${ownerAndProject}/builds.json`;
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', jsonPath, true);
+
+    xhr.onload = () => {
+      const data = JSON.parse(xhr.responseText);
+      if (data.length) {
+        chartDiv.insertAfter(overallDiv[0]);
+
+        let range = (data.length < COLUMN_AMOUNT) ? data.length : COLUMN_AMOUNT;
+        let info = getInfoFromJson(data, range);
+        let chart = buildChart(info, data);
+
+        renderOrHideChart(isFirstTime, chart);
+
+        if (isFirstTime) {
+          bindToggleToHeader(chart);
+        }
+      }
+    };
+    xhr.send();
+  }
+};
 
 const render = (chart) => {
   chart.render();
@@ -26,35 +54,6 @@ const renderOrHideChart = (isFirstTime, chart) => {
   } else {
     // Otherwise we render the Chart and record that it has been rendered
     render(chart);
-  }
-};
-
-const showChart = (isFirstTime) => {
-  const overallDiv = $('div.file-navigation.in-mid-page');
-  if (overallDiv.length !== 0) {
-    const ownerAndProject = $('h1.public > strong > a')[0].pathname;
-    const jsonPath = `https://api.travis-ci.org/repositories${ownerAndProject}/builds.json`;
-
-    const xhr = new XMLHttpRequest();
-    xhr.open('GET', jsonPath, true);
-
-    xhr.onload = () => {
-      const data = JSON.parse(xhr.responseText);
-  		if (data.length) {
-  			chartDiv.insertAfter(overallDiv[0]);
-
-        let range = (data.length < columnAmount) ? data.length : columnAmount;
-        let info = getInfoFromJson(data, range);
-  			let chart = buildChart(info, data);
-
-        renderOrHideChart(isFirstTime, chart);
-
-        if (isFirstTime) {
-          bindToggleToHeader(chart);
-        }
-  		}
-    };
-    xhr.send();
   }
 };
 
@@ -77,11 +76,11 @@ const assembleDataPoints = (info, data) => {
   let dataPoints = [];
   const ownerAndProject = $('h1.public > strong > a')[0].pathname;
   const onClick = (e) => {
-    let order = (columnAmount - 1) - e.dataPoint.x;
+    let order = (COLUMN_AMOUNT - 1) - e.dataPoint.x;
     window.open(`https://travis-ci.org${ownerAndProject}/builds/${data[order]['id']}`, '_blank');
   };
 
-  for (let i = columnAmount - 1; i >= 0; i--) {
+  for (let i = COLUMN_AMOUNT - 1; i >= 0; i--) {
     let dataPoint = {
       label: (i === 0) ? `Latest:${info.buildNum[i]}` : info.buildNum[i],
       y: info.buildTime[i],
@@ -130,12 +129,25 @@ const buildChart = (info, data) => {
   });
 };
 
-const trimBuildNums = (range, info) => {
-  for (let i = range; i < columnAmount; i++) {
-    if (typeof info.buildNum[i] === 'undefined') {
-      info.buildNum[i] = '#';
+const trimBuildNums = (buildNums, range) => {
+  for (let i = range; i < COLUMN_AMOUNT; i++) {
+    if (typeof buildNums[i] === 'undefined') {
+      buildNums[i] = '#';
     }
   }
+};
+
+const getTimeAndInfoForSpecificBuild = (buildStarted, buildFinished, buildMessage) => {
+  let buildTime, buildInfo;
+  if (buildStarted && buildFinished === null) {
+    let skipTime = (new Date() - new Date(buildStarted)) / 1000;
+    let skipTimeStr = trimTimeStr(skipTime);
+    buildTime = trimTimeToMinScale(skipTime);
+    buildInfo = `It's running! <b>Skipped time</b>:${skipTimeStr}<br/><span><b>Message:</b>${buildMessage}</span>`;
+  } else {
+    buildInfo = `Oops, the build may be cancelled.<br/><span><b>Message:</b>${buildMessage}</span>`;
+  }
+  return {buildTime, buildInfo};
 };
 
 const mapBuildData = (range, data) => {
@@ -144,6 +156,7 @@ const mapBuildData = (range, data) => {
     buildColor = [],
     buildInfo = [];
   const GREEN_INDEX = 1;
+  const RED_INDEX = 2;
 
   for (let i = 0; i < range; i++) {
     let buildDuration = trimTimeToMinScale(data[i]['duration']);
@@ -159,33 +172,28 @@ const mapBuildData = (range, data) => {
     buildTime.push(buildDuration);
 
     if (buildState === 'started') {
-      buildColor.push(allColor[2]);
-      if (buildStarted && buildFinished === null) {
-        let skipTime = (new Date() - new Date(buildStarted)) / 1000;
-        let skipTimeStr = trimTimeStr(skipTime);
-        buildTime[i] = trimTimeToMinScale(skipTime);
-        buildInfo[i] = `It's running! <b>Skipped time</b>:${skipTimeStr}<br/><span><b>Message:</b>${buildMessage}</span>`;
-      } else {
-        buildInfo[i] = `Oops, the build may be cancelled.<br/><span><b>Message:</b>${buildMessage}</span>`;
-      }
+      buildColor.push(allColor[RED_INDEX]);
+      const __timeAndInfo = getTimeAndInfoForSpecificBuild(buildStarted, buildFinished, buildMessage);
+      buildTime[i] = __timeAndInfo.buildTime;
+      buildInfo[i] = __timeAndInfo.buildInfo;
     } else {
       buildResult = (buildResult === null) ? GREEN_INDEX : buildResult;
       buildColor.push(allColor[buildResult]);
     }
   }
-  return {buildNum: buildNum, buildTime: buildTime, buildColor: buildColor, buildInfo: buildInfo};
+  return {buildNum, buildTime, buildColor, buildInfo};
 };
 
 const getInfoFromJson = (data, range) => {
   let info = {};
-  const __ret = mapBuildData(range, data);
+  const __mappedResult = mapBuildData(range, data);
 
-  info.buildNum = __ret.buildNum;
-  info.buildTime = __ret.buildTime;
-  info.buildColor = __ret.buildColor;
-  info.buildInfo = __ret.buildInfo;
+  info.buildNum = __mappedResult.buildNum;
+  info.buildTime = __mappedResult.buildTime;
+  info.buildColor = __mappedResult.buildColor;
+  info.buildInfo = __mappedResult.buildInfo;
 
-  trimBuildNums(range, info);
+  trimBuildNums(info.buildNum, range);
 
   return info;
 };
