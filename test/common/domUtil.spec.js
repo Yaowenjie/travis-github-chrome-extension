@@ -24,17 +24,4 @@ describe('domUtil', () => {
       expect(isChartNonexisted()).to.be.false;
     });
   });
-
-  describe('isNotChartHeader()', () => {
-    it('should return false when event target contain Travis-CI Build Chart', () => {
-      const chartHeaderDiv = $('<div>Travis-CI Build Chart</div>');
-      const event = { target: chartHeaderDiv };
-      expect(isNotChartHeader(event)).to.be.false;
-    });
-
-    it('should return true when event target not contain Travis-CI Build Chart', () => {
-      const event = { target: $('<div>Test</div>') };
-      expect(isNotChartHeader(event)).to.be.true;
-    });
-  });
 });

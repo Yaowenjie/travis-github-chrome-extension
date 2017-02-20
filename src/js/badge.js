@@ -4,7 +4,7 @@ import $ from 'jquery';
 const selectors = [
   'h1.public > strong > a',                             //Specific repository
   '.js-repo-filter .d-inline-block h3 a:first-child',   //Repositories & Stars
-  '.org-repos .d-inline-block h3 a',                       //Organization
+  '.org-repos .d-inline-block h3 a',                    //Organization
   '.codesearch-results .d-inline-block a',              //Search
   '.explore-pjax-container .explore-content a'          //Trending
 ];
