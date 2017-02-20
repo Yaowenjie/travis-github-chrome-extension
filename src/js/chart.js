@@ -1,6 +1,6 @@
 import {trimTimeStr, trimMessage, trimTimeToMinScale} from './common/util';
 import {isOverallDivExisted} from './common/domUtil';
-import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY, COLUMN_AMOUNT, CHART_CONTAINER} from './common/constants';
+import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY, COLUMN_AMOUNT, CHART_CONTAINER, CHART_HEADER} from './common/constants';
 import $ from 'jquery';
 import './lib/canvasjs.min';
 
@@ -10,7 +10,7 @@ const allColor = [GREEN, RED, YELLOW];
 let bIsChartRendered = false;
 
 // Generate the chart elements.
-const chartDiv = $('<div id="chartHeader" class="commit-tease" style="width: 100%; padding: 5px 10px; cursor: pointer;">' +
+const chartDiv = $(`<div id="${CHART_HEADER}" class="commit-tease" style="width: 100%; padding: 5px 10px; cursor: pointer;">` +
   `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">Travis-CI Build Chart</h5></div>` +
   `<div id="${CHART_CONTAINER}" class="overall-summary" style="height: 300px; width: 100%;"></div>`);
 
@@ -57,8 +57,8 @@ const renderOrHideChart = (isFirstTime, chart) => {
 };
 
 const bindToggleToHeader = (chart) => {
-  $('#chartHeader').click(() => {
-    const chartDiv = $('#chartHeader').next(`#${CHART_CONTAINER}`);
+  $(`#${CHART_HEADER}`).click(() => {
+    const chartDiv = $(`#${CHART_HEADER}`).next(`#${CHART_CONTAINER}`);
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150, () => {
       // Record the current visibility state
@@ -72,7 +72,7 @@ const bindToggleToHeader = (chart) => {
 };
 
 const unbindToggleToHeader = () => {
-  $('#chartHeader').unbind('click');
+  $(`#${CHART_HEADER}`).unbind('click');
 };
 
 const assembleDataPoints = (info, data) => {
