@@ -19,6 +19,9 @@ On all pages, once you click the build icon, you will go to travis-ci page.
 If you want to install it in Developer mode. First clone or fork this repo. Then, on your Chrome Extensions page, make sure "Developer mode" is checked. You can then click the "Load unpacked extension..." button and browse to the chrome directory of this repo.
 ![Repo Page](imgs/3.png)
 
+## For development
+Please refer to [here](src/README.md).
+
 #### Feedback
 You can give me your feedback on this extension by [github issue](https://github.com/Yaowenjie/travis-github-chrome-extension/issues).
 Besides, sending your pull request on this repo would be better to improve it.
@@ -32,8 +35,11 @@ Besides, sending your pull request on this repo would be better to improve it.
 ## 简介
 该chrome插件为在github上的repo提供travis-ci运行状态和运行时间的图标（见上图1、2），你可以直观的了解到哪些repo（自己或者别人）开通了travis-ci的build，还可以看到特定repo近十次build的时间和状态变化，鼠标置于具体build上，还可查看具体build时间和message，点击还可以进入特定的travis-ci build页面。
 
+## 开发
+想了解开发细节，请参考[此处](src/README.md)。
+
 ## 反馈
-欢迎在[github issue](https://github.com/Yaowenjie/travis-github-chrome-extension/issues)提出你的问题和建议。
+欢迎在[github issue](https://github.com/Yaowenjie/travis-github-chrome-extension/issues)提出你的问题和建议，也欢迎有益的Pull Request。
 
 
 --------

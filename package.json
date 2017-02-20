@@ -1,0 +1,50 @@
+{
+  "name": "github-travis-chrome-extension",
+  "version": "2.1.0",
+  "description": "Display travis-ci build status and time chart, with status icon next to the project name on github.",
+  "main": "chart.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yaowenjie/travis-github-chrome-extension.git"
+  },
+  "keywords": [
+    "Travis-CI",
+    "github",
+    "build",
+    "status",
+    "chart"
+  ],
+  "author": "Yaowenjie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yaowenjie/travis-github-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/Yaowenjie/travis-github-chrome-extension#readme",
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-eslint": "^7.1.1",
+    "babel-preset-es2015": "^6.22.0",
+    "babelify": "^7.3.0",
+    "browserify": "^14.1.0",
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-clean": "^0.3.2",
+    "gulp-eslint": "^3.0.1",
+    "gulp-flatten": "^0.3.1",
+    "gulp-mocha": "^3.0.1",
+    "gulp-uglify": "^2.0.1",
+    "gulp-zip": "^4.0.0",
+    "jsdom": "^9.11.0",
+    "mocha": "^3.2.0",
+    "run-sequence": "^1.2.2",
+    "sinon": "^1.17.7",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "jquery": "^3.1.1"
+  }
+}
