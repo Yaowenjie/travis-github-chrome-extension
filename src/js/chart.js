@@ -1,5 +1,6 @@
 import {trimTimeStr, trimMessage, trimTimeToMinScale} from './common/util';
-import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY, COLUMN_AMOUNT} from './common/constants';
+import {isOverallDivExisted} from './common/domUtil';
+import {GITHUB_GREY, GREEN, RED, YELLOW, GLOBAL_FONT_FAMILY, COLUMN_AMOUNT, CHART_CONTAINER} from './common/constants';
 import $ from 'jquery';
 import './lib/canvasjs.min';
 
@@ -11,11 +12,11 @@ let bIsChartRendered = false;
 // Generate the chart elements.
 const chartDiv = $('<div id="chartHeader" class="commit-tease" style="width: 100%; padding: 5px 10px; cursor: pointer;">' +
   `<h5><img src="${travisIcon}" height="20" style="vertical-align: middle;">Travis-CI Build Chart</h5></div>` +
-  '<div id="chartContainer" class="overall-summary" style="height: 300px; width: 100%;"></div>');
+  `<div id="${CHART_CONTAINER}" class="overall-summary" style="height: 300px; width: 100%;"></div>`);
 
 const showChart = (isFirstTime) => {
   const overallDiv = $('div.file-navigation.in-mid-page');
-  if (overallDiv.length !== 0) {
+  if (isOverallDivExisted()) {
     const ownerAndProject = $('h1.public > strong > a')[0].pathname;
     const jsonPath = `https://api.travis-ci.org/repositories${ownerAndProject}/builds.json`;
 
@@ -48,7 +49,7 @@ const render = (chart) => {
 const renderOrHideChart = (isFirstTime, chart) => {
   if (isFirstTime && localStorage['chartHeaderHidden'] === 'true') {
     // Hide the chartContainer element if previously hidden
-    $('#chartContainer').hide();
+    $(`#${CHART_CONTAINER}`).hide();
   } else {
     // Otherwise we render the Chart and record that it has been rendered
     render(chart);
@@ -57,7 +58,7 @@ const renderOrHideChart = (isFirstTime, chart) => {
 
 const bindToggleToHeader = (chart) => {
   $('#chartHeader').click(() => {
-    const chartDiv = $('#chartHeader').next('#chartContainer');
+    const chartDiv = $('#chartHeader').next(`#${CHART_CONTAINER}`);
     // Toggle the chartContainer visibility
     chartDiv.slideToggle(150, () => {
       // Record the current visibility state
@@ -97,8 +98,8 @@ const assembleDataPoints = (info, data) => {
 };
 
 const buildChart = (info, data) => {
-  return new CanvasJS.Chart('chartContainer', {
-    width: $('#chartHeader').width(),
+  return new CanvasJS.Chart(CHART_CONTAINER, {
+    width: $(`#${CHART_CONTAINER}`).width(),
     height: 298,
     backgroundColor: bodyBgColor,
     animationEnabled: true,

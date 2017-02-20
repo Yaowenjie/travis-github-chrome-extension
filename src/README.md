@@ -22,7 +22,7 @@ Just run `gulp build`, you'll see the zip package in `build` folder. It should b
  - CanvasJS
  - gulp
  - babel (ES6)
- - mocha & chai
+ - mocha & chai & sinon
  - eslint
  
   

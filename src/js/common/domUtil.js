@@ -1,3 +1,4 @@
+import {CHART_CONTAINER} from './constants';
 import $ from 'jquery';
 
 const isBadgeNonexisted = () => {
@@ -5,7 +6,11 @@ const isBadgeNonexisted = () => {
 };
 
 const isChartNonexisted = () => {
-  return $('#chartContainer').length === 0;
+  return $(`#${CHART_CONTAINER}`).length === 0;
+};
+
+const isOverallDivExisted = () => {
+  return $('div.file-navigation.in-mid-page').length !== 0;
 };
 
 const detectPageChanged = (callback) => {
@@ -22,4 +27,4 @@ const detectPageChanged = (callback) => {
   }, DETECT_INTERVAL);
 };
 
-export {isBadgeNonexisted, isChartNonexisted, detectPageChanged};
+export {isBadgeNonexisted, isChartNonexisted, isOverallDivExisted, detectPageChanged};

@@ -4,3 +4,4 @@ export const RED = '#db4545';
 export const YELLOW = '#f1e05a';
 export const GLOBAL_FONT_FAMILY = 'arial, sans-serif';
 export const COLUMN_AMOUNT = 10;
+export const CHART_CONTAINER = 'chartContainer';
