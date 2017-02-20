@@ -1,4 +1,5 @@
-import {isBadgeNonexisted, isChartNonexisted, isNotChartHeader} from '../../src/js/common/domUtil';
+import {isBadgeNonexisted, isChartNonexisted, detectPageChanged} from '../../src/js/common/domUtil';
+import sinon from 'sinon';
 import {expect} from 'chai';
 import $ from 'jquery';
 
@@ -23,5 +24,72 @@ describe('domUtil', () => {
       $('body').append('<div id="chartContainer">TEST</div>');
       expect(isChartNonexisted()).to.be.false;
     });
+  });
+
+  describe('detectPageChanged()', () => {
+    let clock = undefined;
+    let mockedCallback = undefined;
+
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+      mockedCallback = sinon.spy();
+    });
+
+    it('should run callback when window location pathname changed', () => {
+      setInitialPathnameAndSearch();
+      detectPageChanged(mockedCallback);
+      changeLocationPathname();
+      clock.tick(200);
+
+      expect(mockedCallback.called).to.be.true;
+    });
+
+    it('should run callback when window location search changed', () => {
+      setInitialPathnameAndSearch();
+      detectPageChanged(mockedCallback);
+      changeLocationSearch();
+      clock.tick(200);
+
+      expect(mockedCallback.called).to.be.true;
+    });
+
+    it('should not run callback when window location & pathname not changed', () => {
+      setInitialPathnameAndSearch();
+      detectPageChanged(mockedCallback);
+      clock.tick(200);
+
+      expect(mockedCallback.called).to.be.false;
+    });
+
+    afterEach(() => {
+      clock.restore();
+    });
+
+    const setInitialPathnameAndSearch = () => {
+      global.window = {
+        location: {
+          pathname: '/Yaowenjie/yaowenjie.github.io',
+          search: ''
+        }
+      };
+    };
+
+    const changeLocationPathname = () => {
+      global.window = {
+        location: {
+          pathname: '/Yaowenjie/yaowenjie.github.io/projects',
+          search: ''
+        }
+      };
+    };
+
+    const changeLocationSearch = () => {
+      global.window = {
+        location: {
+          pathname: '/Yaowenjie/yaowenjie.github.io',
+          search: '?tab=stars'
+        }
+      };
+    };
   });
 });
