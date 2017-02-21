@@ -99,7 +99,7 @@ const assembleDataPoints = (info, data) => {
 
 const buildChart = (info, data) => {
   return new CanvasJS.Chart(CHART_CONTAINER, {
-    width: $(`#${CHART_CONTAINER}`).width(),
+    width: 978,
     height: 298,
     backgroundColor: bodyBgColor,
     animationEnabled: true,
