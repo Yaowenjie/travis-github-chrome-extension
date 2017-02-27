@@ -1,5 +1,8 @@
-import {isBadgeNonexisted} from './common/domUtil';
 import $ from 'jquery';
+
+const successBadge = chrome.extension.getURL('/build-success.svg');
+const failingBadge = chrome.extension.getURL('/build-failing.svg');
+const unknownBadge = chrome.extension.getURL('/build-unknown.svg');
 
 const selectors = [
   'h1.public > strong > a',                             //Specific repository
@@ -24,20 +27,31 @@ const showBadge = () => {
 
 const insertStatusBadge = (element, project) => {
   let xhr = new XMLHttpRequest();
-  let badgeUrl = `https://api.travis-ci.org${project}.svg`;
+  let badgeUrl = `https://api.travis-ci.org/repositories${project}.json`;
   xhr.open('GET', badgeUrl, true);
-  xhr.responseType = 'blob';
-  xhr.onreadystatechange = () => {
-    if (xhr.readyState == XMLHttpRequest.DONE) {
-      isBadgeNonexisted && buildBadgeImg(xhr.response, project, element);
+
+  xhr.onload = () => {
+    const buildStatus = JSON.parse(xhr.responseText)['last_build_status'];
+    const SUCCESS = 0;
+    const FAILING = 1;
+    let statusBadge;
+
+    if (buildStatus === SUCCESS) {
+      statusBadge = successBadge;
+    } else if (buildStatus === FAILING) {
+      statusBadge = failingBadge;
+    } else {
+      statusBadge = unknownBadge;
     }
+
+    buildBadgeImg(statusBadge, project, element);
   };
   xhr.send();
 };
 
-const buildBadgeImg = (response, project, element) => {
+const buildBadgeImg = (statusBadge, project, element) => {
   const img = $('<img alt="build status" />');
-  img.attr('src', window.URL.createObjectURL(response));
+  img.attr('src', statusBadge);
   img.on('load', () => {
     const link = $(`<a class='travis-ci' href='https://travis-ci.org${project}'></a>`);
     link.append(img);

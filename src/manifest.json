@@ -1,6 +1,6 @@
 {
   "manifest_version": 2,
-  "web_accessible_resources": ["travis-icon.png"],
+  "web_accessible_resources": ["travis-icon.png", "build-failing.svg", "build-success.svg", "build-unknown.svg"],
   "version": "2.1.1",
   "name": "Github Travis Stat",
   "short_name": "build-stat",
