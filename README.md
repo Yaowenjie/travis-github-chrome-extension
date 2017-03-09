@@ -45,6 +45,7 @@ Besides, sending your pull request on this repo would be better to improve it.
 --------
 # Update History
 
+- **2.1.3** - Fix #24 issue: build status badge show in wrong place of trending page.
 - **2.1.2** - Fix console CSP error issue.
 - **2.1.1** - Fix chart width issue.
 - **2.1.0** - Support the build status badge on **Organization/Search/Trending** page, and fix page switching bug. Restructure and refactor code.
