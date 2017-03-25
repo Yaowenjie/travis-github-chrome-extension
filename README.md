@@ -1,4 +1,6 @@
 ## Brief
+
+[![Join the chat at https://gitter.im/yaowenjie/travis-github-chrome-extension](https://badges.gitter.im/yaowenjie/travis-github-chrome-extension.svg)](https://gitter.im/yaowenjie/travis-github-chrome-extension?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 This extension is to display __travis-ci__ status for repos in __github__. There is a visual chart which shows build status and  duration changes for recent 10 times.
 ![GIF](imgs/animation.gif)
 
