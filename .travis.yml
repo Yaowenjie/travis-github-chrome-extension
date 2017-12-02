@@ -6,6 +6,7 @@ install:
   - npm install
 before_script:
   - gem install awesome_bot
+  - npm install -g gulp-cli
 script:
   - awesome_bot README.md --allow-dupe
   - gulp test
