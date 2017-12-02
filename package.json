@@ -1,6 +1,6 @@
 {
   "name": "github-travis-chrome-extension",
-  "version": "2.1.0",
+  "version": "2.1.5",
   "description": "Display travis-ci build status and time chart, with status icon next to the project name on github.",
   "main": "chart.js",
   "scripts": {
