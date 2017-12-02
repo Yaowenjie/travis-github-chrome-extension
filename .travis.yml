@@ -1,8 +1,9 @@
 language: ruby
 rvm:
   - 2.2
+node_js:
+  - 7
 install:
-  - nvm install v5.0.0
   - npm install
 before_script:
   - gem install awesome_bot
