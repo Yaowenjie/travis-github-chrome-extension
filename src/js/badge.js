@@ -7,9 +7,8 @@ const unknownBadge = chrome.extension.getURL('/build-unknown.svg');
 const selectors = [
   'h1.public > strong > a',                             //Specific repository
   '.d-inline-block h3 a:first-child',                   //Repositories & Stars
-  '.org-repos .d-inline-block h3 a',                    //Organization
+  '.org-repos .d-inline-block h3 a',                    //Organization & Trending
   '.codesearch-results .repo-list-item h3 a',           //Search
-  '.explore-pjax-container .explore-content h3 a'       //Trending
 ];
 const repoListSelectors = '.js-pinned-repos-reorder-container p.mb-0'; //Overview
 
