@@ -47,6 +47,8 @@ Besides, sending your pull request on this repo would be better to improve it.
 --------
 # Update History
 
+- **2.1.6** - Fix duplicate badges in trending page.
+- **2.1.5** - Fix badge display issue on repositories and stars.
 - **2.1.4** - Fix badges on search page for its UI change.
 - **2.1.3** - Fix #24 issue: build status badge show in wrong place of trending page.
 - **2.1.2** - Fix console CSP error issue.
